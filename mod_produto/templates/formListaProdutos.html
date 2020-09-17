@@ -1,0 +1,36 @@
+{% extends 'modelo.html' %}
+{% block title %} Produtos {% endblock %}
+{% block content %}
+
+
+<a href="{{ url_for('produto.formProduto')}}">
+    <button  class="btn btn-primary"><i class="fas fa-plus-square">  Novo Produto</i></button>    
+</a>
+
+<div style="margin-top: 20px;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Imagem</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>seila</td>
+                <td>1.00</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block js%}
+<script>
+    $('thead tr th').attr('scope','col')
+</script>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'modelo.html' %}
+{% block title %} Pedidos {% endblock %}
+
+{% block content %}
+
+    <h2>Novo Pedido</h2>
+    <form>
+        <div class="form-row">
+            <div class="form-group col-2">
+                <label for="numeroPedido">Número do Pedido:</label>
+                <input id="numeroPedido" class="form-control" type="text">
+            </div>
+            <div class="form-group col-4">
+                <label for="nomeCliente">Nome Cliente:</label>
+                <input id="nomeCliente" class="form-control" type="text">
+            </div>
+            <div class="form-group col-4">
+                <label for="telefone">Telefone:</label>
+                <input id="telefone" class="form-control" type="tel">
+            </div>
+            <div class="form-group col-2">
+                <label for="codigoCliente">Código Cliente:</label>
+                <input id="codigoCliente" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-4">
+                <label for="endereco">Endereço:</label>
+                <input id="endereco" class="form-control" type="text">
+            </div>
+            <div class="form-group col-2">
+                <label for="numeroEndereco">Número:</label>
+                <input id="numeroEndereco" class="form-control" type="text">
+            </div>
+            <div class="form-group col-2">
+                <label for="cep">CEP:</label>
+                <input id="cep" class="form-control" type="text">
+            </div>
+            <div class="form-group col-2">
+                <label for="bairro">Bairro:</label>
+                <input id="bairro" class="form-control" type="text">
+            </div>
+            <div class="form-group col-2">
+                <label for="cidade">Cidade:</label>
+                <input id="cidade" class="form-control" type="text">
+            </div>
+        </div>        
+        <div class="form-row">
+            <div class="form-group col-4">
+                <label for="dataHora">Data/Hora:</label>
+                <input id="dataHora" class="form-control" type="datetime-local">
+            </div>
+            <div class="form-group col-8">
+                <label for="observacao">Observações:</label>
+                <textarea id="observacao" class="form-control" type="text"></textarea>
+            </div>
+        </div>
+        <hr style="border-top: 3px solid #bbb;">
+        <div class="form-row">
+            <div class="form-group col-2">
+                <label for="produto">Produto:</label>
+                <input id="produto" class="form-control" type="text">
+            </div>
+            <div class="form-group col-2">
+                <label for="descricaoProduto">Descrição:</label>
+                <input id="descricaoProduto" class="form-control" type="text">
+            </div>
+            <div class="form-group col-4">
+                <label for="preco">Preço:</label>
+                <input id="preco" class="form-control" type="text">
+            </div>
+            <div class="form-group col-2">
+                <label for="quantidade">Quantidade:</label>
+                <input id="quantidade" class="form-control" type="number">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-4">
+                <label for="total">Total:</label>
+                <input id="total" class="form-control" type="text">
+            </div>
+            <div class="form-group col-6">
+                <label for="observacoesProduto">Observações:</label>
+                <input id="observacoesProduto" class="form-control" type="text">
+            </div>
+        </div>
+        
+        <button class="btn btn-primary"><i class="fas fa-plus">  Adicionar</i></button>
+        <button class="btn btn-success"><i class="far fa-save">  Salvar</i></button>
+        <button class="btn btn-danger"><i class="fas fa-trash-alt">  Excluir</i></button>
+    </form>
+{% endblock %}
