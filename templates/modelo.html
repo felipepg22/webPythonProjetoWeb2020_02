@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    {% block head %}
+    <head>
+        <title>{% block title %}{% endblock %} - Felipe</title>
+        <link rel="stylesheet" href="{{ url_for('static',filename = 'bootstrap-4.5.2-dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename = 'fontawesome-free-5.14.0-web/css/all.min.css') }}">
+    </head>
+    {% endblock %}
+    <body>                
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2">
+                    <div class="list-group">
+                        <h3 class="list-group-item list-group-item-action list-group-item-info">Web App</h3>                
+                        <a href="#"><i class="fas fa-home"> Home</i></a>
+                        <a href="#"><i class="fas fa-users"> Clientes</i></a>
+                        <a href="#"><i class="fas fa-utensils"> Produtos</i></a>
+                        <a href="#"><i class="fas fa-book"> Pedidos</i></a>
+                        <a href="#"><i class="fas fa-sign-out-alt"> Sair</i></a>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="container-fluid" style="width: 70%; float:right;">
+                        {% block content %}{% endblock %}                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='jquery/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static', filename='bootstrap-4.5.2-dist/js/bootstrap.min.js') }}"></script>
+        <script>
+            $(".list-group a").addClass("list-group-item list-group-item-action list-group-item-info");
+        </script>
+    </body>
+</html>
