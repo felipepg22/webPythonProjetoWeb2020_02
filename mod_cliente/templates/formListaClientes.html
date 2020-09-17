@@ -1,0 +1,31 @@
+{% extends 'modelo.html' %}
+{% block title %} Clientes {% endblock %}
+{% block content %}
+
+
+<a href="{{ url_for('cliente.formCliente')}}">
+    <button  class="btn btn-primary"><i class="fas fa-plus-square">  Novo Cliente</i></button>    
+</a>
+
+<div style="margin-top: 20px;">
+    <ul class="list-group list-group-horizontal-md">
+        <li>#</li>
+        <li>Nome</li>
+        <li>Endereço</li>
+        <li>Número</li>
+        <li>Observação</li>
+        <li>CEP</li>
+        <li>Bairro</li>
+        <li>Cidade</li>
+        <li>Estado</li>
+        <li>Telefone</li>
+    </ul>    
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $("ul li").addClass("list-group-item");
+    
+</script>
+{% endblock %}
