@@ -8,24 +8,45 @@
 </a>
 
 <div style="margin-top: 20px;">
-    <ul class="list-group list-group-horizontal-md">
-        <li>#</li>
-        <li>Nome</li>
-        <li>Endereço</li>
-        <li>Número</li>
-        <li>Observação</li>
-        <li>CEP</li>
-        <li>Bairro</li>
-        <li>Cidade</li>
-        <li>Estado</li>
-        <li>Telefone</li>
-    </ul>    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Endereço</th>
+                <th>Número</th>
+                <th>Observação</th>
+                <th>CEP</th>
+                <th>Bairro</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Telefone</th>
+                <th>Email</th>
+                <th>Grupo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>seila</td>
+                <td>Rua abc bolinhas</td>
+                <td>12314134</td>
+                <td>Casa</td>
+                <td>12314134</td>
+                <td>seila</td>
+                <td>tanto faz</td>
+                <td>SC</td>
+                <td>1243143141</td>
+                <td>@ alguma coisa</td>
+                <td>Admin</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 {% endblock %}
 
-{% block js %}
+{% block js%}
 <script>
-    $("ul li").addClass("list-group-item");
-    
+    $('thead tr th').attr('scope','col')
 </script>
 {% endblock %}
