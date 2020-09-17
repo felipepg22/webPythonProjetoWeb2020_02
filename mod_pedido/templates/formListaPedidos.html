@@ -1,0 +1,50 @@
+{% extends 'modelo.html' %}
+{% block title %} Pedidos {% endblock %}
+{% block content %}
+
+
+<a href="{{ url_for('pedidos.formPedido')}}">
+    <button  class="btn btn-primary"><i class="fas fa-plus-square">  Novo Pedido</i></button>    
+</a>
+
+<div style="margin-top: 20px;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cliente</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th>Número</th>
+                <th>CEP</th>
+                <th>Bairro</th>
+                <th>Cidade</th>
+                <th>Obs</th>
+                <th>Data/Hora</th>
+                <th>Produtos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>abc</td>
+                <td>123213213</td>
+                <td>Rua dahora</td>
+                <td>111111</td>
+                <td>222222</td>
+                <td>seila</td>
+                <td>tanto faz</td>
+                <td>SC</td>
+                <td>11/11/11</td>
+                <td>Algum produto</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block js%}
+<script>
+    $('thead tr th').attr('scope','col');
+</script>
+{% endblock %}
