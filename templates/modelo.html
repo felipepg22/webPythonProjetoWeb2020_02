@@ -14,16 +14,14 @@
                     <div class="list-group">
                         <h3 class="list-group-item list-group-item-action list-group-item-info">Web App</h3>                
                         <a href="#"><i class="fas fa-home"> Home</i></a>
-                        <a href="#"><i class="fas fa-users"> Clientes</i></a>
+                        <a href="{{ url_for('cliente.formListaClientes') }}"><i class="fas fa-users"> Clientes</i></a>
                         <a href="#"><i class="fas fa-utensils"> Produtos</i></a>
                         <a href="#"><i class="fas fa-book"> Pedidos</i></a>
                         <a href="#"><i class="fas fa-sign-out-alt"> Sair</i></a>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="container-fluid" style="width: 70%; float:right;">
-                        {% block content %}{% endblock %}                        
-                    </div>
+                <div class="col-10" style="margin-top: 20px;">
+                    {% block content %}{% endblock %}
                 </div>
             </div>
         </div>
@@ -32,5 +30,6 @@
         <script>
             $(".list-group a").addClass("list-group-item list-group-item-action list-group-item-info");
         </script>
+        {% block js %}{% endblock %}
     </body>
 </html>
