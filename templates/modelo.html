@@ -3,11 +3,23 @@
     {% block head %}
     <head>
         <title>{% block title %}{% endblock %} - Felipe</title>
+        <style>
+            header{                    
+                    padding: 20px 0;
+                    height: 100px;
+                    margin-bottom: 0;
+                }
+            
+        </style>
         <link rel="stylesheet" href="{{ url_for('static',filename = 'bootstrap-4.5.2-dist/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename = 'fontawesome-free-5.14.0-web/css/all.min.css') }}">
     </head>
     {% endblock %}
-    <body>                
+    <body>
+        <header class="p-3 mb-2 bg-info text-white text-center">
+            <img class="mx-auto float-left" style="height: 5em; width: 10em;"  src="{{ url_for('static', filename = 'imgs/backtothefuture-logo-black-and-white.png') }}">
+            <h1>Web App - Felipe Parizzi Galli</h1>
+        </header>                
         <div class="container-fluid">
             <div class="row">
                 <div class="col-2">
@@ -19,6 +31,9 @@
                         <a href="{{ url_for('pedidos.formListaPedidos') }}"><i class="fas fa-book"> Pedidos</i></a>
                         <a href="#"><i class="fas fa-sign-out-alt"> Sair</i></a>
                     </div>
+                    <footer class="p-3 bg-info text-white text-center" style="height: max-content;">
+                        <p>&copy; Copyright Felipe Parizzi Galli</p>
+                    </footer>
                 </div>
                 <div class="col-10" style="margin-top: 20px;">
                     {% block content %}{% endblock %}
@@ -31,5 +46,6 @@
             $(".list-group a").addClass("list-group-item list-group-item-action list-group-item-info");
         </script>
         {% block js %}{% endblock %}
+        
     </body>
 </html>
