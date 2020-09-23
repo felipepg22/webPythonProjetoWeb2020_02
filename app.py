@@ -13,12 +13,5 @@ app.register_blueprint(bp_home)
 app.register_blueprint(bp_pedido)
 app.register_blueprint(bp_erro)
 
-@app.errorhandler(404)
-def nao_encontrado(error):
-    return render_template("form404.html"), 404
-
-@app.errorhandler(500)
-def erro_servidor(error):
-    return render_template("form500.html"), 500
 if __name__ == "__main__":
     app.run()
