@@ -29,7 +29,7 @@
                         <a href="{{ url_for('cliente.formListaClientes') }}"><i class="fas fa-users"> Clientes</i></a>
                         <a href="{{ url_for('produto.formListaProdutos') }}"><i class="fas fa-utensils"> Produtos</i></a>
                         <a href="{{ url_for('pedidos.formListaPedidos') }}"><i class="fas fa-book"> Pedidos</i></a>
-                        <a href="#"><i class="fas fa-sign-out-alt"> Sair</i></a>
+                        <a href="{{ url_for('login.logoff')}}"><i class="fas fa-sign-out-alt"> Sair</i></a>
                     </div>
                     <footer class="p-3 bg-info text-white text-center" style="height: max-content;">
                         <p>&copy; Copyright Felipe Parizzi Galli</p>

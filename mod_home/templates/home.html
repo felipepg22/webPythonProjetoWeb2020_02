@@ -4,6 +4,7 @@
 {% block content %}
 
 <h1>Bem vindo a WebApp do Felipe!</h1>
-
-
+{% if 'usuario' in session %}
+    <h3>{{ session['usuario'] }}</h3>
+{% endif %}
 {% endblock %}
