@@ -13,17 +13,19 @@
         </style>
         <link rel="stylesheet" href="{{ url_for('static',filename = 'bootstrap-4.5.2-dist/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename = 'fontawesome-free-5.14.0-web/css/all.min.css') }}">
+        
     </head>
     {% endblock %}
     <body>
         <header class="p-3 mb-2 bg-info text-white text-center">
             <img class="mx-auto float-left" style="height: 5em; width: 10em;"  src="{{ url_for('static', filename = 'imgs/backtothefuture-logo-black-and-white.png') }}">
             <h1>Web App - Felipe Parizzi Galli</h1>
+            <div style="float: right;" id="tempo-sessao"></div>
         </header>                
         <div class="container-fluid">
             <div class="row">
                 <div class="col-2">
-                    <div class="list-group">
+                    <div class="list-group">                        
                         <h3 class="list-group-item list-group-item-action list-group-item-info">Web App</h3>                
                         <a href="{{ url_for('home.home') }}"><i class="fas fa-home"> Home</i></a>
                         <a href="{{ url_for('cliente.formListaClientes') }}"><i class="fas fa-users"> Clientes</i></a>
@@ -32,7 +34,8 @@
                         <a href="{{ url_for('login.logoff')}}"><i class="fas fa-sign-out-alt"> Sair</i></a>
                     </div>
                     <footer class="p-3 bg-info text-white text-center" style="height: max-content;">
-                        <p>&copy; Copyright Felipe Parizzi Galli</p>
+                        <p>&copy; Copyright</p>
+                        <p>Felipe Parizzi Galli</p>
                     </footer>
                 </div>
                 <div class="col-10" style="margin-top: 20px;">
@@ -42,8 +45,58 @@
         </div>
         <script src="{{ url_for('static', filename='jquery/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static', filename='bootstrap-4.5.2-dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='jquery.countdown-2.2.0/jquery.countdown.min.js') }}"></script>        
         <script>
             $(".list-group a").addClass("list-group-item list-group-item-action list-group-item-info");
+
+                                
+                if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+                    
+                    comecaContagem();
+                } 
+            
+            
+            function getTempoInicial(){
+
+                let tempoInicial = new Date(Date.now());
+
+                return tempoInicial;
+            }
+
+            function getTempoSessao(){
+
+                let tempoInicial = getTempoInicial();
+
+                let tempoFinal = new Date(tempoInicial.getFullYear(),
+                                          tempoInicial.getMonth(),
+                                          tempoInicial.getDate(),
+                                          tempoInicial.getHours(),
+                                          tempoInicial.getMinutes() + {{session['tempo']}},
+                                          tempoInicial.getSeconds(),
+                                          tempoInicial.getMilliseconds());
+
+                console.log(tempoInicial);
+                console.log(tempoFinal);
+
+                return tempoFinal;
+            }
+
+            function comecaContagem(){
+                $('#tempo-sessao').countdown(getTempoSessao(), function(event) {
+                        $(this).html(event.strftime('%M min. %S segundos'));
+                    });
+            }
+           
+            $(document).ready(function(){
+                
+                
+                comecaContagem();
+
+            });
+            
+            
+
+            
         </script>
         {% block js %}{% endblock %}
         
