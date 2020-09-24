@@ -17,7 +17,14 @@ app.secret_key = os.urandom(12).hex()
 @app.before_request
 def before_request():
     session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=30)
+    _tempo = 30      
+    session['tempo'] = _tempo
+    app.permanent_session_lifetime = timedelta(minutes=_tempo)    
+    
+
+
+
+
 
 app.register_blueprint(bp_login)
 app.register_blueprint(bp_cliente)
@@ -25,6 +32,10 @@ app.register_blueprint(bp_produto)
 app.register_blueprint(bp_home)
 app.register_blueprint(bp_pedido)
 app.register_blueprint(bp_erro)
+
+@app.route("/cronometro")
+def cronometro():
+    return render_template("cronometro.html")
 
 if __name__ == "__main__":
     app.run()
