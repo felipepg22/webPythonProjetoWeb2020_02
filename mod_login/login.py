@@ -1,8 +1,10 @@
-#coding: utf-8
-from flask import Blueprint, render_template, request, redirect, url_for, session
+#coding utf-8
 from functools import wraps
+from flask import Blueprint, render_template, request, redirect, url_for, session
 
 bp_login = Blueprint('login', __name__, url_prefix='/', template_folder='templates')
+
+
 
 # valida se o usuário esta ativo na sessão
 def validaSessao(f):
@@ -10,12 +12,13 @@ def validaSessao(f):
     def decorated_function(*args, **kwargs):
         if 'usuario' not in session:
             #descarta os dados copiados da função original e retorna a tela de login
-            return redirect(url_for('login.login',falhaSessao=1))
+            return redirect(url_for('login.login', falhaSessao=1))
         else:
             #retorna os dados copiados da função original
             return f(*args, **kwargs)
-        #retorna o resultado do if acima
-        return decorated_function
+
+    #retorna o resultado do if acima
+    return decorated_function
 
 @bp_login.route("/")
 def login():
@@ -39,7 +42,8 @@ def validaLogin():
         session['usuario'] = _name
 
         #abre a aplicação na tela home
-        return redirect(url_for('home.index'))
+        return redirect(url_for('home.home'))
     else:
         #retorna para a tela de login
         return redirect(url_for('login.login', falhaLogin=1))
+
