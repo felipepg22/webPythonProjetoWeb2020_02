@@ -7,11 +7,16 @@
     <div id="login">
         <h3 class="text-center text-white pt-5">Web App Felipe</h3>
         <div class="container">            
-            {% if(request.args.get('falhaLogin') == '1'): %}
+            {% if(request.args.get('falhaSessao') == '1'): %}
             <div class="alert alert-danger" role="alert" style="margin-bottom: -50">
                 Falha na Sessão! Faça o login!
             </div>
-            {% endif %}        
+            {% endif %}
+            {% if(request.args.get('falhaLogin') == '1'): %}
+            <div class="alert alert-danger" role="alert" style="margin-bottom: -50">
+                Usuário ou Senha incorreto! Tente novamente.
+            </div>
+            {% endif %}         
             <div id="login-row" class="row justify-content-center align-items-center">
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12">                        
