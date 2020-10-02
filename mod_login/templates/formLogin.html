@@ -1,6 +1,8 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'bootstrap-4.5.2-dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'login/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='sweet-alert/sweetalert.css') }}">
+    <script src="{{ url_for('static', filename='sweet-alert/sweetalert.js') }}"></script>    
     <title>Login</title>
 </head>
 <body>
@@ -8,14 +10,14 @@
         <h3 class="text-center text-white pt-5">Web App Felipe</h3>
         <div class="container">            
             {% if(request.args.get('falhaSessao') == '1'): %}
-            <div class="alert alert-danger" role="alert" style="margin-bottom: -50">
-                Falha na Sessão! Faça o login!
-            </div>
+                <script>
+                     swal("Falha na Sessão!","Faça o Login!","error");
+                </script>
             {% endif %}
             {% if(request.args.get('falhaLogin') == '1'): %}
-            <div class="alert alert-danger" role="alert" style="margin-bottom: -50">
-                Usuário ou Senha incorreto! Tente novamente.
-            </div>
+                <script>
+                    swal("Falha no Login!","Usuário ou senha incorreto!","error");
+                </script>
             {% endif %}         
             <div id="login-row" class="row justify-content-center align-items-center">
                 <div id="login-column" class="col-md-6">
@@ -43,4 +45,5 @@
     </div>
     <script src="{{ url_for('static', filename='jquery/jquery-3.5.1.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-4.5.2-dist/js/bootstrap.min.js') }}"></script>
+    
 </body>
