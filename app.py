@@ -33,9 +33,7 @@ app.register_blueprint(bp_home)
 app.register_blueprint(bp_pedido)
 app.register_blueprint(bp_erro)
 
-@app.route("/cronometro")
-def cronometro():
-    return render_template("cronometro.html")
+
 
 if __name__ == "__main__":
     app.run()
