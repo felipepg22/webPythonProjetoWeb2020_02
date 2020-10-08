@@ -67,6 +67,9 @@ class Clientes(object):
     def insert(self):
         try:
             banco = Banco()
+        except:
+            return "Erro conexão banco"
+        try:
 
             c = banco.conexao.cursor()
             c.execute("insert into tb_clientes(nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (self.nome, self.endereco, self.numero, self.observacao, self.cep, self.bairro, self.cidade, self.estado, self.telefone, self.email, self.login, self.senha, self.grupo))
@@ -76,8 +79,8 @@ class Clientes(object):
 
             return "Cliente cadastrado com sucesso!"
 
-        except:
-            return "Erro ao cadastrar o Cliente!"
+        except Exception as e:
+            return "Erro ao cadastrar o Cliente!" + str(e)
         
     def update(self):
         try:
@@ -106,4 +109,4 @@ class Clientes(object):
             c.close()
             return "Cliente excluído com sucesso!"
         except:
-            return "Erro ao tentar excluir cliente!"
+            return "Erro ao tentar excluir"
