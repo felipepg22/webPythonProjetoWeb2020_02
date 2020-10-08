@@ -45,30 +45,31 @@ def addCliente():
     cliente.login = request.form['login']
     cliente.senha = request.form['senha']
     cliente.grupo = request.form['grupo']
-    _mensagem = cliente.insert()
+    cliente.insert()
     
         
-    return redirect(url_for('cliente.formListaClientes',mensagem = _mensagem))
+    return redirect(url_for('cliente.formListaClientes'))
 
 @bp_cliente.route("/editCliente", methods=['POST'])
 @validaSessao
 def editCliente():
     cliente=Clientes()
     cliente.id_cliente = request.form['id_cliente']
-    cliente.nome = request.form['nome']
-    cliente.endereco = request.form['endereco']
-    cliente.numero = request.form['numero']
-    cliente.observacao = request.form['observacao']
-    cliente.cep = request.form['cep']
-    cliente.bairro = request.form['bairro']
-    cliente.cidade = request.form['cidade']
-    cliente.estado = request.form['estado']
-    cliente.telefone = request.form['telefone']
-    cliente.email = request.form['email']
-    cliente.login = request.form['login']
-    cliente.senha = request.form['senha']
-    cliente.grupo = request.form['grupo']
     if 'salvaEditaUsuarioDB' in request.form:
+        cliente.nome = request.form['nome']
+        cliente.endereco = request.form['endereco']
+        cliente.numero = request.form['numero']
+        cliente.observacao = request.form['observacao']
+        cliente.cep = request.form['cep']
+        cliente.bairro = request.form['bairro']
+        cliente.cidade = request.form['cidade']
+        cliente.estado = request.form['estado']
+        cliente.telefone = request.form['telefone']
+        cliente.email = request.form['email']
+        cliente.login = request.form['login']
+        cliente.senha = request.form['senha']
+        cliente.grupo = request.form['grupo']
+        
         cliente.update()
     elif 'salvaExcluiUsuarioDB' in request.form:
         cliente.delete()

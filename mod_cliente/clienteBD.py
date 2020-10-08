@@ -95,8 +95,8 @@ class Clientes(object):
             c.close()
 
             return "Cliente editado com sucesso!"
-        except:
-            return "Erro ao editar cliente!"
+        except Exception as e:
+            return "Erro ao editar cliente!" + str(e)
     
     def delete(self):
         try:

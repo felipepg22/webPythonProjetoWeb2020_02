@@ -39,13 +39,11 @@
                 <td> {{ row[8] }}</td>
                 <td> {{ row[9] }}</td>
                 <td> {{ row[10] }}</td>
-                <td> {{ row[11] }}</td>
-                <td> {{ row[12] }}</td>
-                <td> {{ row[13] }}</td>
+                <td> {{ row[13] }}</td>                
                 <td>
-                    <form action='{{ url_for('cliente.formEditCliente') }}' method='POST' name='editUsuario'>
-                    <input type='hidden' name='id_cliente' value='{{ row[0] }}'>
-                    <button type='submit' name='formEditCliente'><i class='fas fa-edit'></i></button>
+                    <form action="{{ url_for('cliente.formEditCliente') }}" method='POST' name='editUsuario'>
+                        <input type='hidden' name='id_cliente' value='{{ row[0] }}'>
+                        <button type='submit' name='formEditCliente'><i class='fas fa-edit'></i></button>
                     </form>
                 </td>
             </tr>
