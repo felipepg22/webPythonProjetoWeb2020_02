@@ -2,7 +2,7 @@
 {% block title %} Clientes {% endblock %}
 
 {% block content %}
-
+    
     {% if cliente.id_cliente == 0: %}
     <h2>Novo Cliente</h2>
     <form action="{{ url_for('cliente.addCliente') }}" method="POST">
@@ -52,7 +52,7 @@
             <div class="form-group col-2">
                 <label for="estado">Estado:</label>
                 <select id="estado" name="estado" class="form-control">
-                    <option value="{{ cliente.estado }}"></option>
+                    <option selected value="{{ cliente.estado }}">{{ cliente.estado }}</option>
                     <option value="SC">SC</option>
                     <option value="PR">PR</option>
                     <option value="RJ">RJ</option>
@@ -82,7 +82,7 @@
             <div class="form-group col-2">
                 <label for="grupo">Grupo:</label>
                 <select id="grupo"  name="grupo" class="form-control">
-                    <option value="{{ cliente.grupo }}"></option>
+                    <option selected value="{{ cliente.grupo }}">{{ cliente.grupo }}</option>
                     <option value="SOLIC">SOLIC</option>
                 </select>
             </div>
