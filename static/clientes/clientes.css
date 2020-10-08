@@ -1,0 +1,13 @@
+table { 
+    table-layout:fixed;
+}
+
+td { 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    word-wrap: break-word;
+}
+
+form button{
+    width: 40px;
+}
