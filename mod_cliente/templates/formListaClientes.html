@@ -45,6 +45,10 @@
                         <input type='hidden' name='id_cliente' value='{{ row[0] }}'>
                         <button type='submit' name='formEditCliente'><i class='fas fa-edit'></i></button>
                     </form>
+                    <form action="{{ url_for('cliente.editCliente') }}" method='POST' name='excluiUsuario'>
+                        <input type='hidden' name='id_cliente' value='{{ row[0] }}'>
+                        <button type='submit' name='salvaExcluiUsuarioDB'><i class='fas fa-trash-alt'></i></button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}

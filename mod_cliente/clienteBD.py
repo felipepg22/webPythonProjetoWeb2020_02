@@ -106,7 +106,9 @@ class Clientes(object):
 
             c.execute("delete from tb_clientes where id_cliente = %s", (self.id_cliente))
 
+            banco.conexao.commit()
+
             c.close()
             return "Cliente excluído com sucesso!"
-        except:
-            return "Erro ao tentar excluir"
+        except Exception as e:
+            return "Erro ao tentar excluir" + str(e)

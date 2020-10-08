@@ -55,6 +55,7 @@ def addCliente():
 def editCliente():
     cliente=Clientes()
     cliente.id_cliente = request.form['id_cliente']
+    
     if 'salvaEditaUsuarioDB' in request.form:
         cliente.nome = request.form['nome']
         cliente.endereco = request.form['endereco']
