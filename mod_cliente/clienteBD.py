@@ -80,9 +80,10 @@ class Clientes(object):
             return "Cliente cadastrado com sucesso!"
 
         except Exception as e:
-            return "Erro ao cadastrar o Cliente!" + str(e)
+            return "Erro ao cadastrar o Cliente!"
         
     def update(self):
+        
         try:
             banco = Banco()
 
@@ -93,10 +94,13 @@ class Clientes(object):
             banco.conexao.commit()
 
             c.close()
+            
+            
 
             return "Cliente editado com sucesso!"
         except Exception as e:
-            return "Erro ao editar cliente!" + str(e)
+           
+            return "Erro ao editar cliente!"
     
     def delete(self):
         try:
@@ -111,4 +115,4 @@ class Clientes(object):
             c.close()
             return "Cliente excluído com sucesso!"
         except Exception as e:
-            return "Erro ao tentar excluir" + str(e)
+            return "Erro ao tentar excluir"
