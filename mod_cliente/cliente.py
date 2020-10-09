@@ -6,7 +6,7 @@ from mod_cliente.clienteBD import Clientes
 
 bp_cliente = Blueprint('cliente', __name__, url_prefix='/cliente', template_folder='templates')
 
-@bp_cliente.route("/")
+@bp_cliente.route("/", methods=['GET', 'POST'])
 @validaSessao
 def formListaClientes():
     cliente = Clientes()
@@ -58,26 +58,31 @@ def addCliente():
 @bp_cliente.route("/editCliente", methods=['POST'])
 @validaSessao
 def editCliente():
-    cliente = Clientes()
-    cliente.id_cliente = request.form['id_cliente']
-    
-    if 'salvaEditaUsuarioDB' in request.form:
-        cliente.nome = request.form['nome']
-        cliente.endereco = request.form['endereco']
-        cliente.numero = request.form['numero']
-        cliente.observacao = request.form['observacao']
-        cliente.cep = request.form['cep']
-        cliente.bairro = request.form['bairro']
-        cliente.cidade = request.form['cidade']
-        cliente.estado = request.form['estado']
-        cliente.telefone = request.form['telefone']
-        cliente.email = request.form['email']
-        cliente.login = request.form['login']
-        cliente.senha = request.form['senha']
-        cliente.grupo = request.form['grupo']
-        
-        cliente.update()
-    elif 'salvaExcluiUsuarioDB' in request.form:
-        cliente.delete()
+    try:
+        cliente = Clientes()
+        cliente.id_cliente = request.form['id_cliente']
+        tipo = request.form['tipo']
+        _mensagem = ""
+        _mensagem_exception = ""
+        if 'salvaEditaUsuarioDB' in request.form:
+            cliente.nome = request.form['nome']
+            cliente.endereco = request.form['endereco']
+            cliente.numero = request.form['numero']
+            cliente.observacao = request.form['observacao']
+            cliente.cep = request.form['cep']
+            cliente.bairro = request.form['bairro']
+            cliente.cidade = request.form['cidade']
+            cliente.estado = request.form['estado']
+            cliente.telefone = request.form['telefone']
+            cliente.email = request.form['email']
+            cliente.login = request.form['login']
+            cliente.senha = request.form['senha']
+            cliente.grupo = request.form['grupo']
+            
+            _mensagem, _mensagem_exception = cliente.update()
+        elif tipo == 'excluir':
+            _mensagem, _mensagem_exception = cliente.delete()
 
-    return redirect(url_for('cliente.formListaClientes'))
+        return jsonify(erro = 0, mensagem = _mensagem)
+    except:
+        return jsonify(erro = 1, mensagem = _mensagem, mensagem_exception = _mensagem_exception)

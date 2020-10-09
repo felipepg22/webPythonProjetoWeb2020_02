@@ -4,7 +4,7 @@
 {% block content %}
     
     {% if cliente.id_cliente == 0: %}
-    <h2 id="h2">Novo Cliente</h2>
+    <h2>Novo Cliente</h2>
     <form id="addCliente">
     {% else: %}
     <h2>Editar Cliente</h2>
@@ -97,13 +97,14 @@
 
 {% block js %}
 <script>
+    // Sempre pega a url da barra de endereço
     $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-
+    
     $('#addCliente').submit(function(e){
 
         e.preventDefault();
        
-        
+        //Faz requisição ajax
         $.post($SCRIPT_ROOT + "{{url_for('cliente.addCliente')}}", {
 
             id_cliente:$('#id_cliente').val(),
@@ -122,7 +123,7 @@
             grupo:$('#grupo').val()
             
         }, function(data){
-
+           
             if(data.erro == 0){
                 swal({
                     title: "",
@@ -138,7 +139,7 @@
                             window.location.replace($SCRIPT_ROOT + "{{ url_for('cliente.formListaClientes') }}");
                         } 
                     });
-                //window.location.replace($SCRIPT_ROOT + "{{ url_for('cliente.formListaClientes') }}")
+                
 
             }
             else{

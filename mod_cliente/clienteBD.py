@@ -94,9 +94,9 @@ class Clientes(object):
 
             c.close()
 
-            return "Cliente editado com sucesso!"
+            return "Cliente editado com sucesso!", ""
         except Exception as e:
-            return "Erro ao editar cliente!" + str(e)
+            return "Erro ao editar cliente!", str(e)
     
     def delete(self):
         try:
@@ -109,6 +109,6 @@ class Clientes(object):
             banco.conexao.commit()
 
             c.close()
-            return "Cliente excluído com sucesso!"
+            return "Cliente excluído com sucesso!", ""
         except Exception as e:
-            return "Erro ao tentar excluir" + str(e)
+            return "Erro ao tentar excluir", str(e)

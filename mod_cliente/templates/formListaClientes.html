@@ -42,12 +42,12 @@
                 <td> {{ row[10] }}</td>
                 <td> {{ row[13] }}</td>                
                 <td>                    
-                    <form action="{{ url_for('cliente.formEditCliente') }}" method='POST' name='editUsuario'>
+                    <form id="editUsuario" action="{{ url_for('cliente.formEditCliente') }}" method="POST" name='editUsuario'>
                         <input type='hidden' name='id_cliente' value='{{ row[0] }}'>
                         <button type='submit' class="btn btn-warning btn-sm" name='formEditCliente'><i class='fas fa-edit fa-s'></i></button>
                     </form>
-                    <form style="margin-top: 2px;" action="{{ url_for('cliente.editCliente') }}" method='POST' name='excluiUsuario'>
-                        <input type='hidden' name='id_cliente' value='{{ row[0] }}'>
+                    <form style="margin-top: 2px;" name='excluiUsuario' method="POST">
+                        <input type='hidden' id="id_cliente" name='id_cliente' value='{{ row[0] }}'>
                         <button type='submit' class="btn btn-danger btn-sm" name='salvaExcluiUsuarioDB'><i class='fas fa-trash-alt'></i></button>
                     </form>                    
                 </td>
@@ -61,6 +61,64 @@
 
 {% block js%}
 <script>
-    $('thead tr th').attr('scope','col');    
+    $('thead tr th').attr('scope','col');
+
+    
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    
+
+    $("form[name='excluiUsuario']").submit(function(e){
+        e.preventDefault();
+        console.log('submit');
+        swal({
+            title: "",
+            text: "Deseja realmente excluir o registro de cliente?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Sim",
+            closeOnConfirm: false
+            },
+            function(){
+                console.log('ok');
+                deletaCliente($(e.target)[0][0].value)// Retorna o valor que está no id do cliente escolhido);
+        });
+    });
+        function deletaCliente(idCliente){
+
+            $.post($SCRIPT_ROOT + "{{ url_for('cliente.editCliente') }}", {
+
+                id_cliente: idCliente,
+                tipo: 'excluir'
+                },function(data){
+
+                if(data.erro == 0){
+
+                    swal({
+                        title: "",
+                        text: data.mensagem,
+                        type: "success",                    
+                        confirmButtonClass: "btn-success",
+                        confirmButtonText: "Ok",                    
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                window.location.replace($SCRIPT_ROOT + "{{ url_for('cliente.formListaClientes') }}");
+                            } 
+                        });
+                }
+                else{
+                    swal("",data.mensagem,"error");
+                    console.log(data.mensagem_exception);
+                }
+            }
+            )
+        }
+        
+        
+        
+
 </script>
 {% endblock %}
