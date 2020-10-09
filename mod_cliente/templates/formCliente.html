@@ -4,8 +4,8 @@
 {% block content %}
     
     {% if cliente.id_cliente == 0: %}
-    <h2>Novo Cliente</h2>
-    <form action="{{ url_for('cliente.addCliente') }}" method="POST">
+    <h2 id="h2">Novo Cliente</h2>
+    <form id="addCliente">
     {% else: %}
     <h2>Editar Cliente</h2>
     <form action="{{ url_for('cliente.editCliente') }}" method="POST">
@@ -93,4 +93,61 @@
         <button type="submit" name="salvaEditaUsuarioDB" class="btn btn-primary"><i class="far fa-save">  Editar</i></button>
         {% endif %}
     </form>
+{% endblock %}
+
+{% block js %}
+<script>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+    $('#addCliente').submit(function(e){
+
+        e.preventDefault();
+       
+        
+        $.post($SCRIPT_ROOT + "{{url_for('cliente.addCliente')}}", {
+
+            id_cliente:$('#id_cliente').val(),
+            nome:$('#nome').val(),
+            endereco:$('#endereco').val(),
+            numero:$('#numero').val(),
+            observacao:$('#observacao').val(),
+            cep:$('#cep').val(),
+            bairro:$('#bairro').val(),
+            cidade:$('#cidade').val(),
+            estado:$('#estado').val(),
+            telefone:$('#telefone').val(),
+            email:$('#email').val(),
+            login:$('#login').val(),
+            senha:$('#senha').val(),
+            grupo:$('#grupo').val()
+            
+        }, function(data){
+
+            if(data.erro == 0){
+                swal({
+                    title: "",
+                    text: data.mensagem,
+                    type: "success",                    
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Ok",                    
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            window.location.replace($SCRIPT_ROOT + "{{ url_for('cliente.formListaClientes') }}");
+                        } 
+                    });
+                //window.location.replace($SCRIPT_ROOT + "{{ url_for('cliente.formListaClientes') }}")
+
+            }
+            else{
+                swal("", data.mensagem, "error");
+            }
+        }
+        
+        )
+    })
+</script>
+
 {% endblock %}
