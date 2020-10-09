@@ -31,7 +31,8 @@ def formEditCliente():
 
 @bp_cliente.route("/addCliente", methods = ['POST'])
 @validaSessao
-def addCliente():    
+def addCliente():
+    _mensagem = ""    
     try:
         cliente = Clientes()
         cliente.id_cliente = request.form['id_cliente']    
@@ -48,10 +49,10 @@ def addCliente():
         cliente.login = request.form['login']
         cliente.senha = request.form['senha']
         cliente.grupo = request.form['grupo']
-        cliente.insert()
-        return jsonify(erro = 0, mensagem = 'Cliente cadastrado com sucesso!')
+        _mensagem = cliente.insert()
+        return jsonify(erro = False, mensagem = _mensagem)
     except:
-        return jsonify(erro = 1, mensagem = 'Erro ao cadastrar cliente!')
+        return jsonify(erro = True, mensagem = _mensagem)
     
     
 
@@ -62,9 +63,9 @@ def editCliente():
         cliente = Clientes()
         cliente.id_cliente = request.form['id_cliente']
         tipo = request.form['tipo']
-        _mensagem = ""
-        _mensagem_exception = ""
-        if 'salvaEditaUsuarioDB' in request.form:
+        
+       
+        if tipo == 'editar':
             cliente.nome = request.form['nome']
             cliente.endereco = request.form['endereco']
             cliente.numero = request.form['numero']
@@ -79,10 +80,10 @@ def editCliente():
             cliente.senha = request.form['senha']
             cliente.grupo = request.form['grupo']
             
-            _mensagem, _mensagem_exception = cliente.update()
+            _mensagem = cliente.update()
         elif tipo == 'excluir':
-            _mensagem, _mensagem_exception = cliente.delete()
+            _mensagem = cliente.delete()
 
-        return jsonify(erro = 0, mensagem = _mensagem)
+        return jsonify(erro = False, mensagem = _mensagem)
     except:
-        return jsonify(erro = 1, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
+        return jsonify(erro = True, mensagem = _mensagem)

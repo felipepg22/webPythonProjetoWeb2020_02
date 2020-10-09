@@ -69,7 +69,7 @@
 
     $("form[name='excluiUsuario']").submit(function(e){
         e.preventDefault();
-        console.log('submit');
+        
         swal({
             title: "",
             text: "Deseja realmente excluir o registro de cliente?",
@@ -80,8 +80,8 @@
             closeOnConfirm: false
             },
             function(){
-                console.log('ok');
-                deletaCliente($(e.target)[0][0].value)// Retorna o valor que está no id do cliente escolhido);
+                
+                deletaCliente($(e.target)[0][0].value);// Retorna o valor que está no id do cliente escolhido);
         });
     });
         function deletaCliente(idCliente){

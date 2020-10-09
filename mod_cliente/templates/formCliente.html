@@ -8,7 +8,7 @@
     <form id="addCliente">
     {% else: %}
     <h2>Editar Cliente</h2>
-    <form action="{{ url_for('cliente.editCliente') }}" method="POST">
+    <form id="editCliente">
     {% endif %}
         <div class="form-row">
             <div class="form-group col-2">
@@ -149,6 +149,58 @@
         
         )
     })
+
+    $('#editCliente').submit(function(e){
+
+        e.preventDefault();
+
+        //Faz requisição ajax
+        $.post($SCRIPT_ROOT + "{{url_for('cliente.editCliente')}}", {
+
+            id_cliente:$('#id_cliente').val(),
+            nome:$('#nome').val(),
+            endereco:$('#endereco').val(),
+            numero:$('#numero').val(),
+            observacao:$('#observacao').val(),
+            cep:$('#cep').val(),
+            bairro:$('#bairro').val(),
+            cidade:$('#cidade').val(),
+            estado:$('#estado').val(),
+            telefone:$('#telefone').val(),
+            email:$('#email').val(),
+            login:$('#login').val(),
+            senha:$('#senha').val(),
+            grupo:$('#grupo').val(),
+            tipo: 'editar'
+            
+        }, function(data){
+        
+            if(!data.erro){
+                swal({
+                    title: "",
+                    text: data.mensagem,
+                    type: "success",                    
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Ok",                    
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            window.location.replace($SCRIPT_ROOT + "{{ url_for('cliente.formListaClientes') }}");
+                        } 
+                    });
+                
+
+            }
+            else{
+                swal("", data.mensagem, "error");
+                
+            }
+        }
+
+        )
+        })
 </script>
 
 {% endblock %}
