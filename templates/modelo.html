@@ -14,7 +14,7 @@
         {% block style %}{% endblock %}
         <link rel="stylesheet" href="{{ url_for('static',filename = 'bootstrap-4.5.2-dist/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename = 'fontawesome-free-5.14.0-web/css/all.min.css') }}">
-        
+        <link rel="stylesheet" href="{{ url_for('static', filename= 'sweet-alert/sweetalert.css') }}">
     </head>
     {% endblock %}
     <body>
@@ -46,7 +46,8 @@
         </div>
         <script src="{{ url_for('static', filename='jquery/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static', filename='bootstrap-4.5.2-dist/js/bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='jquery.countdown-2.2.0/jquery.countdown.min.js') }}"></script>        
+        <script src="{{ url_for('static', filename='jquery.countdown-2.2.0/jquery.countdown.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='sweet-alert/sweetalert.js') }}"></script>        
         <script>
             $(".list-group a").addClass("list-group-item list-group-item-action list-group-item-info");
 
