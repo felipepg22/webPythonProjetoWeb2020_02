@@ -22,7 +22,7 @@ class Clientes(object):
             banco = Banco()
             c = banco.conexao.cursor()
 
-            c.execute("select id_cliente,nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo from tb_clientes")
+            c.execute("select id_cliente,nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo from tb_cliente")
 
             result = c.fetchall()
 
