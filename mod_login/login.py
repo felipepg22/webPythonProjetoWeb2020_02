@@ -1,6 +1,6 @@
 #coding utf-8
 from functools import wraps
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 
 bp_login = Blueprint('login', __name__, url_prefix='/', template_folder='templates')
 
@@ -42,8 +42,8 @@ def validaLogin():
         session['usuario'] = _name
 
         #abre a aplicação na tela home
-        return redirect(url_for('home.home'))
+        return jsonify(erro = False, mensagem = f'Bem vindo {_name}!')
     else:
         #retorna para a tela de login
-        return redirect(url_for('login.login', falhaLogin=1))
+        return jsonify(erro = True, mensagem = "Usuário ou senha incorretos!")
 
