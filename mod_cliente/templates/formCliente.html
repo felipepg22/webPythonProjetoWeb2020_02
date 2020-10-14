@@ -124,7 +124,7 @@
             
         }, function(data){
            
-            if(data.erro == 0){
+            if(!data.erro){
                 swal({
                     title: "",
                     text: data.mensagem,
