@@ -74,7 +74,7 @@ class Clientes(object):
             c = banco.conexao.cursor()
             c.execute("insert into tb_clientes(nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (self.nome, self.endereco, self.numero, self.observacao, self.cep, self.bairro, self.cidade, self.estado, self.telefone, self.email, self.login, self.senha, self.grupo))
             banco.conexao.commit()
-
+            
             c.close()
 
             return "Cliente cadastrado com sucesso!"
@@ -137,3 +137,16 @@ class Clientes(object):
         except Exception as e:
             raise Exception('Erro na busca!', str(e))
              
+    def verificaSeLoginExiste(self):
+        try:
+            banco = Banco()
+
+            c = banco.conexao.cursor()
+
+            c.execute('SELECT id_cliente FROM tb_clientes WHERE login = %s',(self.login))
+            result = c.fetchall()
+            c.close()
+
+            return result
+        except Exception as e:
+            raise Exception(str(e))

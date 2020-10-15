@@ -92,3 +92,20 @@ def editCliente():
         return jsonify(erro = False, mensagem = _mensagem)
     except:
         return jsonify(erro = True, mensagem = _mensagem)
+
+@bp_cliente.route('/verificaSeLoginExiste', methods = ['POST'])
+@validaSessao
+def verificaSeLoginExiste():
+    cliente = Clientes()
+    cliente.login = request.form['login']
+
+    try:
+        result = cliente.verificaSeLoginExiste()
+
+        if len(result) > 0:
+            return jsonify(login_existe = True, mensagem = "Login já existente! Tente outro!")
+        else:
+            return jsonify(login_existe = False, mensagem = "Login OK!")
+    except Exception as e:
+        return jsonify(erro = True, mensagem_exception = str(e))
+
