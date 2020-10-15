@@ -17,7 +17,7 @@
             </div>
             <div class="form-group col-8">
                 <label for="nome">Nome Cliente:</label>
-                <input id="nome" value="{{ cliente.nome }}" name="nome" class="form-control" type="text">
+                <input id="nome" value="{{ cliente.nome }}" name="nome" class="form-control" type="text" required>
             </div>
         </div>
         <div class="form-row">
@@ -63,21 +63,23 @@
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="telefone">Telefone:</label>
-                <input id="telefone" value="{{ cliente.telefone }}" maxlength="11" name="telefone" placeholder="(XX)00000-00000" class="form-control" type="tel">
+                <input id="telefone" value="{{ cliente.telefone }}" maxlength="11" name="telefone" placeholder="(XX)00000-00000" class="form-control" type="tel"  required>
             </div>
             <div class="form-group col-6">
                 <label for="email">Email:</label>
-                <input id="email" value="{{ cliente.email }}" name="email" class="form-control" type="email">
+                <input id="email" value="{{ cliente.email }}" name="email" class="form-control" type="email" required>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="login">Login:</label>
-                <input id="login" value="{{ cliente.login }}" name="login" class="form-control" type="text">
+                <input id="login" value="{{ cliente.login }}" name="login" class="form-control" type="text" required>
+                <div class="valid-feedback">Login OK!</div>
+                <div class="invalid-feedback">Login já existente! Tente outro!</div>
             </div>
             <div class="form-group col-4">
                 <label for="senha">Senha:</label>
-                <input id="senha" value="{{ cliente.senha }}" name="senha" class="form-control" type="password">
+                <input id="senha" value="{{ cliente.senha }}" name="senha" class="form-control" type="password" required>
             </div>
             <div class="form-group col-2">
                 <label for="grupo">Grupo:</label>
@@ -144,6 +146,7 @@
             }
             else{
                 swal("", data.mensagem, "error");
+                console.log(data.mensagem_exception);
             }
         }
         
@@ -200,6 +203,34 @@
         }
 
         )
+        })
+
+        $(document).ready(function(){
+            //Verifica se o login existe ou não
+            $('#login').keyup(function(e){
+                
+                $.post($SCRIPT_ROOT + "{{ url_for('cliente.verificaSeLoginExiste') }}",{
+                    
+                    login:$('#login').val()
+                    }, function(data){
+
+                        if(data.erro){
+
+                            console.log(data.mensagem_exception);
+                        }
+                        else if(data.login_existe){
+                            
+                            $('#login').addClass('is-invalid').removeClass('is-valid');
+                            $("button[name='salvaInsereUsuarioDB']").attr('disabled', true);
+                        }
+                        else{
+
+                            $('#login').addClass('is-valid').removeClass('is-invalid');
+                            $("button[name='salvaInsereUsuarioDB']").attr('disabled', false)
+                        }
+                    })
+
+            })
         })
 </script>
 

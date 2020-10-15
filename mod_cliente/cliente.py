@@ -1,5 +1,6 @@
 # coding utf-8
 from flask import Blueprint, render_template, request, url_for, redirect, jsonify
+import hashlib
 
 from mod_login.login import validaSessao
 from mod_cliente.clienteBD import Clientes
@@ -47,12 +48,16 @@ def addCliente():
         cliente.telefone = request.form['telefone']
         cliente.email = request.form['email']
         cliente.login = request.form['login']
-        cliente.senha = request.form['senha']
+        cliente.senha = hashlib.sha3_256(request.form['senha'].encode('utf-8')).hexdigest()
         cliente.grupo = request.form['grupo']
         _mensagem = cliente.insert()
         return jsonify(erro = False, mensagem = _mensagem)
-    except:
-        return jsonify(erro = True, mensagem = _mensagem)
+    except Exception as e:
+        if len(e.args) > 1:
+            _mensagem, _mensagem_exception = e.args
+            return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
+        else:
+            return jsonify(erro = True,mensagem = "Erro ao tentar cadastrar cliente!" ,mensagem_exception = str(e))
     
     
 
@@ -87,3 +92,20 @@ def editCliente():
         return jsonify(erro = False, mensagem = _mensagem)
     except:
         return jsonify(erro = True, mensagem = _mensagem)
+
+@bp_cliente.route('/verificaSeLoginExiste', methods = ['POST'])
+@validaSessao
+def verificaSeLoginExiste():
+    cliente = Clientes()
+    cliente.login = request.form['login']
+
+    try:
+        result = cliente.verificaSeLoginExiste()
+
+        if len(result) > 0:
+            return jsonify(login_existe = True, mensagem = "Login já existente! Tente outro!")
+        else:
+            return jsonify(login_existe = False, mensagem = "Login OK!")
+    except Exception as e:
+        return jsonify(erro = True, mensagem_exception = str(e))
+
