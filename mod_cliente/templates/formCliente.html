@@ -46,7 +46,7 @@
         <div class="form-row">
             <div class="form-group col-2">
                 <label for="cep">CEP:</label>
-                <input id="cep" maxlength="8" value="{{ cliente.cep }}" name="cep" class="form-control" type="text">
+                <input id="cep" maxlength="8" value="{{ cliente.cep }}" name="cep" placeholder="00000-000" class="form-control" type="text">
             </div>
             <div class="form-group col-2">
                 <label for="bairro">Bairro:</label>
@@ -74,7 +74,7 @@
             </div>
             <div class="form-group col-6">
                 <label class='required-input' for="email">Email:</label>
-                <input id="email" maxlength="100" value="{{ cliente.email }}" name="email" class="form-control" type="email" required>
+                <input id="email" maxlength="100" value="{{ cliente.email }}" name="email" placeholder="exemplo@exemplo.com" class="form-control" type="email" required>
             </div>
         </div>
         <div class="form-row">
@@ -111,6 +111,7 @@
     
     $('#addCliente').submit(function(e){
 
+        tiraMascaras();
         e.preventDefault();
        
         //Faz requisição ajax
@@ -162,6 +163,7 @@
 
     $('#editCliente').submit(function(e){
 
+        tiraMascaras();
         e.preventDefault();
 
         //Faz requisição ajax
@@ -212,9 +214,25 @@
         )
         })
 
+    function criaMascaras(){
+
+        $('#cep').mask('00000-000');
+        $('#telefone').mask('(00) 00000-0000');
+        $('#email').mask("A", {
+	translation: {
+		"A": { pattern: /[\w@\-.+]/, recursive: true }
+	}
+});
+    }
+
+    function tiraMascaras(){
+        $('#cep').unmask();
+        $('#telefone').unmask();
+        $('#email').unmask();
+    }
         $(document).ready(function(){
             
-            
+            criaMascaras();
             //Verifica se o login existe ou não
             $('#login').keyup(function(e){
                 

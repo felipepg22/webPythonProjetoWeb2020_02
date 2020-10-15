@@ -82,7 +82,7 @@ def editCliente():
             cliente.telefone = request.form['telefone']
             cliente.email = request.form['email']
             cliente.login = request.form['login']
-            cliente.senha = request.form['senha']
+            cliente.senha = hashlib.sha3_256(request.form['senha'].encode('utf-8')).hexdigest()
             cliente.grupo = request.form['grupo']
             
             _mensagem = cliente.update()
@@ -101,11 +101,11 @@ def verificaSeLoginExiste():
 
     try:
         result = cliente.verificaSeLoginExiste()
-
+        #Verifica se achou o login no banco
         if len(result) > 0:
-            return jsonify(login_existe = True, mensagem = "Login já existente! Tente outro!")
+            return jsonify(login_existe = True)
         else:
-            return jsonify(login_existe = False, mensagem = "Login OK!")
+            return jsonify(login_existe = False)
     except Exception as e:
         return jsonify(erro = True, mensagem_exception = str(e))
 

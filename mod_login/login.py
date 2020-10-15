@@ -54,10 +54,10 @@ def validaLogin():
             session['login'] = cliente.login
             session['grupo'] = cliente.grupo
 
-            #abre a aplicação na tela home
+            
             return jsonify(erro = False, mensagem = f'Bem vindo {cliente.nome}!')
         else:
-            #retorna para a tela de login
+            
             return jsonify(erro = True, mensagem = "Usuário ou senha incorretos!")
     except Exception as e:
         _mensagem, _mensagem_exception = e.args
