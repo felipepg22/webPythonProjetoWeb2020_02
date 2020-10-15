@@ -9,6 +9,14 @@
                     height: 100px;
                     margin-bottom: 0;
                 }
+
+            .sessao-usuario{
+                position: absolute;
+                right: 0;                
+                left: 90%;
+                top: 0;
+                text-align: left;
+            }
             
         </style>
         {% block style %}{% endblock %}
@@ -21,6 +29,10 @@
         <header class="p-3 mb-2 bg-info text-white text-center">
             <img class="mx-auto float-left" style="height: 5em; width: 10em;"  src="{{ url_for('static', filename = 'imgs/backtothefuture-logo-black-and-white.png') }}">
             <h1>Web App - Felipe Parizzi Galli</h1>
+            <div class="sessao-usuario">
+                <p>Nome: {{ session['usuario']  }} </p>
+                <p>Grupo: {{ session['grupo'] }}</p>
+            </div>
             <div style="float: right;" id="tempo-sessao"></div>
         </header>                
         <div class="container-fluid">
