@@ -90,8 +90,9 @@ def editCliente():
             _mensagem = cliente.delete()
 
         return jsonify(erro = False, mensagem = _mensagem)
-    except:
-        return jsonify(erro = True, mensagem = _mensagem)
+    except Exception as e:
+        _mensagem, _mensagem_exception = e.args
+        return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
 
 @bp_cliente.route('/verificaSeLoginExiste', methods = ['POST'])
 @validaSessao
