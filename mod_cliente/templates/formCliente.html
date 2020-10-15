@@ -17,37 +17,37 @@
             </div>
             <div class="form-group col-8">
                 <label for="nome">Nome Cliente:</label>
-                <input id="nome" value="{{ cliente.nome }}" name="nome" class="form-control" type="text" required>
+                <input autofocus maxlength="100" id="nome" value="{{ cliente.nome }}" name="nome" class="form-control" type="text" required>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-6">
                 <label for="endereco">Endereço:</label>
-                <input id="endereco" value="{{ cliente.endereco }}" name="endereco" class="form-control" type="text">
+                <input id="endereco" maxlength="150" value="{{ cliente.endereco }}" name="endereco" class="form-control" type="text">
             </div>
             <div class="form-group col-4">
                 <label for="numero">Número:</label>
-                <input id="numero" value="{{ cliente.numero }}" name="numero" class="form-control" type="number">
+                <input id="numero"  value="{{ cliente.numero }}" name="numero" class="form-control" type="number">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-10">
                 <label for="observacao">Observação:</label>
-                <input id="observacao" value="{{ cliente.observacao }}" name="observacao" class="form-control" type="text">
+                <input id="observacao" maxlength="200" value="{{ cliente.observacao }}" name="observacao" class="form-control" type="text">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-2">
                 <label for="cep">CEP:</label>
-                <input id="cep" value="{{ cliente.cep }}" name="cep" class="form-control" type="text">
+                <input id="cep" maxlength="8" value="{{ cliente.cep }}" name="cep" class="form-control" type="text">
             </div>
             <div class="form-group col-2">
                 <label for="bairro">Bairro:</label>
-                <input id="bairro" value="{{ cliente.bairro }}" name="bairro" class="form-control" type="text">
+                <input id="bairro" maxlength="50" value="{{ cliente.bairro }}" name="bairro" class="form-control" type="text">
             </div>
             <div class="form-group col-4">
                 <label for="cidade">Cidade:</label>
-                <input id="cidade" value="{{ cliente.cidade }}" name="cidade" class="form-control" type="text">
+                <input id="cidade" maxlength="50" value="{{ cliente.cidade }}" name="cidade" class="form-control" type="text">
             </div>
             <div class="form-group col-2">
                 <label for="estado">Estado:</label>
@@ -63,17 +63,17 @@
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="telefone">Telefone:</label>
-                <input id="telefone" value="{{ cliente.telefone }}" maxlength="11" name="telefone" placeholder="(XX)00000-00000" class="form-control" type="tel"  required>
+                <input id="telefone" minlength="10" maxlength="11" value="{{ cliente.telefone }}" maxlength="11" name="telefone" placeholder="(XX)00000-00000" class="form-control" type="tel"  required>
             </div>
             <div class="form-group col-6">
                 <label for="email">Email:</label>
-                <input id="email" value="{{ cliente.email }}" name="email" class="form-control" type="email" required>
+                <input id="email" maxlength="100" value="{{ cliente.email }}" name="email" class="form-control" type="email" required>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="login">Login:</label>
-                <input id="login" value="{{ cliente.login }}" name="login" class="form-control" type="text" required>
+                <input id="login" maxlength="11" value="{{ cliente.login }}" name="login" class="form-control" type="text" required>
                 <div class="valid-feedback">Login OK!</div>
                 <div class="invalid-feedback">Login já existente! Tente outro!</div>
             </div>
@@ -206,32 +206,42 @@
         })
 
         $(document).ready(function(){
+            
+            
             //Verifica se o login existe ou não
             $('#login').keyup(function(e){
                 
-                $.post($SCRIPT_ROOT + "{{ url_for('cliente.verificaSeLoginExiste') }}",{
-                    
-                    login:$('#login').val()
-                    }, function(data){
+                if(e.target.value.length > 0){
 
-                        if(data.erro){
+                    $.post($SCRIPT_ROOT + "{{ url_for('cliente.verificaSeLoginExiste') }}",{
+                        
+                        login:$('#login').val()
+                        }, function(data){
 
-                            console.log(data.mensagem_exception);
-                        }
-                        else if(data.login_existe){
-                            
-                            $('#login').addClass('is-invalid').removeClass('is-valid');
-                            $("button[name='salvaInsereUsuarioDB']").attr('disabled', true);
-                        }
-                        else{
+                            if(data.erro){
 
-                            $('#login').addClass('is-valid').removeClass('is-invalid');
-                            $("button[name='salvaInsereUsuarioDB']").attr('disabled', false)
-                        }
-                    })
+                                console.log(data.mensagem_exception);
+                            }
+                            else if(data.login_existe){
+                                
+                                $('#login').addClass('is-invalid').removeClass('is-valid');
+                                $("button[name='salvaInsereUsuarioDB']").attr('disabled', true);
+                            }
+                            else{
+
+                                $('#login').addClass('is-valid').removeClass('is-invalid');
+                                $("button[name='salvaInsereUsuarioDB']").attr('disabled', false)
+                            }
+                        })
+                }
+                else{
+
+                    $('#login').removeClass('is-valid').removeClass('is-invalid');
+                }
 
             })
-        })
+            
+       })
 </script>
 
 {% endblock %}
