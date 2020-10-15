@@ -1,5 +1,12 @@
 {% extends 'modelo.html' %}
 {% block title %} Clientes {% endblock %}
+{% block style %}
+<style>
+    .required-input{
+        color: red;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
     
@@ -16,7 +23,7 @@
                 <input id="id_cliente" value="{{ cliente.id_cliente }}" class="form-control" type="text" name="id_cliente" readonly>
             </div>
             <div class="form-group col-8">
-                <label for="nome">Nome Cliente:</label>
+                <label class='required-input' for="nome">Nome Cliente:</label>
                 <input autofocus maxlength="100" id="nome" value="{{ cliente.nome }}" name="nome" class="form-control" type="text" required>
             </div>
         </div>
@@ -62,23 +69,23 @@
         </div>
         <div class="form-row">
             <div class="form-group col-4">
-                <label for="telefone">Telefone:</label>
+                <label class='required-input' for="telefone">Telefone:</label>
                 <input id="telefone" minlength="10" maxlength="11" value="{{ cliente.telefone }}" maxlength="11" name="telefone" placeholder="(XX)00000-00000" class="form-control" type="tel"  required>
             </div>
             <div class="form-group col-6">
-                <label for="email">Email:</label>
+                <label class='required-input' for="email">Email:</label>
                 <input id="email" maxlength="100" value="{{ cliente.email }}" name="email" class="form-control" type="email" required>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-4">
-                <label for="login">Login:</label>
+                <label class='required-input' for="login">Login:</label>
                 <input id="login" maxlength="11" value="{{ cliente.login }}" name="login" class="form-control" type="text" required>
                 <div class="valid-feedback">Login OK!</div>
                 <div class="invalid-feedback">Login já existente! Tente outro!</div>
             </div>
             <div class="form-group col-4">
-                <label for="senha">Senha:</label>
+                <label class='required-input' for="senha">Senha:</label>
                 <input id="senha" value="{{ cliente.senha }}" name="senha" class="form-control" type="password" required>
             </div>
             <div class="form-group col-2">
