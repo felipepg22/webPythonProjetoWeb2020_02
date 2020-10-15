@@ -22,14 +22,14 @@ class Clientes(object):
             banco = Banco()
             c = banco.conexao.cursor()
 
-            c.execute("select id_cliente,nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo from tb_cliente")
+            c.execute("select id_cliente,nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo from tb_clientes")
 
             result = c.fetchall()
 
             c.close()
 
             return result
-        except:
+        except Exception as e:
             return "Ocorreu um erro ao buscar os clientes"
 
     def selectOne(self):
@@ -80,7 +80,7 @@ class Clientes(object):
             return "Cliente cadastrado com sucesso!"
 
         except Exception as e:
-            return "Erro ao cadastrar o Cliente!"
+            raise Exception('Erro ao tentar cadastrar cliente!', str(e))
         
     def update(self):
         
@@ -116,3 +116,24 @@ class Clientes(object):
             return "Cliente excluído com sucesso!"
         except Exception as e:
             return "Erro ao tentar excluir"
+
+    def selectLogin(self):
+        try:
+            banco = Banco()
+            c= banco.conexao.cursor()
+
+            c.execute("select id_cliente,nome,login,grupo from tb_clientes where login= %s and senha = %s", (self.login, self.senha))
+
+            for linha in c:
+                self.id_cliente = linha[0]
+                self.nome = linha[1]
+                self.login = linha[2]
+                self.grupo = linha[3]
+
+            c.close()
+
+            return 'Busca feita com sucesso!'
+
+        except Exception as e:
+            raise Exception('Erro na busca!', str(e))
+             
