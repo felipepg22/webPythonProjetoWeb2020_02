@@ -1,6 +1,10 @@
 #coding utf-8
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
+import hashlib
+
+
+from mod_cliente.clienteBD import Clientes
 
 bp_login = Blueprint('login', __name__, url_prefix='/', template_folder='templates')
 
@@ -31,19 +35,31 @@ def logoff():
 
 @bp_login.route("/login", methods=['POST'])
 def validaLogin():
+    cliente = Clientes()
     _name = request.form['usuario']
     _pass = request.form['senha']
 
-    if _name == 'abc' and _pass == 'Bolinhas':
-        #limpa a sessão
-        session.clear()
+    cliente.login = _name
+    cliente.senha = hashlib.sha3_256(_pass.encode('utf-8')).hexdigest()
 
-        #inclui o nome do usuário na sessão
-        session['usuario'] = _name
+    try:
+        cliente.selectLogin()
 
-        #abre a aplicação na tela home
-        return jsonify(erro = False, mensagem = f'Bem vindo {_name}!')
-    else:
-        #retorna para a tela de login
-        return jsonify(erro = True, mensagem = "Usuário ou senha incorretos!")
+        if cliente.id_cliente > 0:
+            #limpa a sessão
+            session.clear()
+
+            #inclui o nome do usuário na sessão
+            session['usuario'] = cliente.nome
+            session['login'] = cliente.login
+            session['grupo'] = cliente.grupo
+
+            
+            return jsonify(erro = False, mensagem = f'Bem vindo {cliente.nome}!')
+        else:
+            
+            return jsonify(erro = True, mensagem = "Usuário ou senha incorretos!")
+    except Exception as e:
+        _mensagem, _mensagem_exception = e.args
+        return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
 

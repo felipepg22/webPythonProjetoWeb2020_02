@@ -22,14 +22,14 @@ class Clientes(object):
             banco = Banco()
             c = banco.conexao.cursor()
 
-            c.execute("select id_cliente,nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo from tb_cliente")
+            c.execute("select id_cliente,nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo from tb_clientes")
 
             result = c.fetchall()
 
             c.close()
 
             return result
-        except:
+        except Exception as e:
             return "Ocorreu um erro ao buscar os clientes"
 
     def selectOne(self):
@@ -74,13 +74,13 @@ class Clientes(object):
             c = banco.conexao.cursor()
             c.execute("insert into tb_clientes(nome,endereco,numero,observacao,cep,bairro,cidade,estado,telefone,email,login,senha,grupo) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (self.nome, self.endereco, self.numero, self.observacao, self.cep, self.bairro, self.cidade, self.estado, self.telefone, self.email, self.login, self.senha, self.grupo))
             banco.conexao.commit()
-
+            
             c.close()
 
             return "Cliente cadastrado com sucesso!"
 
         except Exception as e:
-            return "Erro ao cadastrar o Cliente!"
+            raise Exception('Erro ao tentar cadastrar cliente!', str(e))
         
     def update(self):
         
@@ -98,9 +98,8 @@ class Clientes(object):
             
 
             return "Cliente editado com sucesso!"
-        except Exception as e:
-           
-            return "Erro ao editar cliente!"
+        except Exception as e:           
+            raise Exception("Erro ao editar cliente!", str(e))
     
     def delete(self):
         try:
@@ -115,4 +114,38 @@ class Clientes(object):
             c.close()
             return "Cliente excluído com sucesso!"
         except Exception as e:
-            return "Erro ao tentar excluir"
+            raise Exception("Erro ao tentar excluir", str(e))
+
+    def selectLogin(self):
+        try:
+            banco = Banco()
+            c= banco.conexao.cursor()
+
+            c.execute("select id_cliente,nome,login,grupo from tb_clientes where login= %s and senha = %s", (self.login, self.senha))
+
+            for linha in c:
+                self.id_cliente = linha[0]
+                self.nome = linha[1]
+                self.login = linha[2]
+                self.grupo = linha[3]
+
+            c.close()
+
+            return 'Busca feita com sucesso!'
+
+        except Exception as e:
+            raise Exception('Erro na busca!', str(e))
+             
+    def verificaSeLoginExiste(self):
+        try:
+            banco = Banco()
+
+            c = banco.conexao.cursor()
+
+            c.execute('SELECT id_cliente FROM tb_clientes WHERE login = %s',(self.login))
+            result = c.fetchall()
+            c.close()
+
+            return result
+        except Exception as e:
+            raise Exception(str(e))
