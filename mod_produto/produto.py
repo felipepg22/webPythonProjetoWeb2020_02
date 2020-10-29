@@ -13,12 +13,21 @@ def formListaProdutos():
     _produto = Produtos()
     _lista = _produto.selectAll()   
 
-    return render_template("formListaProdutos.html", produtos = _lista)
+    return render_template("formListaProdutos.html", produtos = _lista, content_type='application/json')
 
 @bp_produto.route("/formProduto")
 @validaSessao
 def formProduto():
-    return render_template("formProduto.html")
+    produto = Produtos()
+    return render_template("formProduto.html", produto=produto, content_type='application/json')
+
+@bp_produto.route("/formEditProduto")
+@validaSessao
+def formEditProduto():
+    produto = Produtos()
+    produto.id_produto = request.form['id_produto']
+    produto.selectONE()
+    return render_template('formProduto.html', produto=produto, content_type='application/json')
 
 @bp_produto.route("/addProduto", methods = ['POST'])
 @validaSessao
@@ -28,7 +37,7 @@ def addProduto():
         _produto = Produtos()
         _produto.descricao = request.form['descricao']
         _produto.valor = request.form['valor']
-        _produto.imagem = base64.b64encode(bytearray(request.form['imagem'],'utf-8'))
+        _produto.imagem = "data:" + request.files['imagem'].content_type + ";base64," + str(base64.b64encode(request.files['imagem'].read()), "utf-8")
 
         _mensagem = _produto.insert()
 
@@ -43,3 +52,40 @@ def addProduto():
         return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
 
 
+@bp_produto.route("/editProduto", methods=['POST'])
+@validaSessao
+def editProduto():
+    _mensagem = ""
+    try:
+        produto = Produtos()
+        produto.id_produto = request.form['id_produto']
+        produto.descricao = request.form['descricao']
+        produto.valor = request.form['valor']
+        produto.imagem = "data:" + request.files['imagem'].content_type + ";base64," + str(base64.b64encode(request.files['imagem'].read()), "utf-8")
+
+        _mensagem = produto.update()
+        return jsonify(erro=False, mensagem=_mensagem)
+    except Exception as e:
+        if len(e.args)> 1:
+            _mensagem, _mensagem_exception = e.args
+        else:
+            _mensagem = 'Erro no banco'
+            _mensagem_exception = e.args
+        return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
+
+@bp_produto.route("/deleteProduto", methods=['POST'])
+@validaSessao
+def deleteProduto():
+    _msg = ""
+    try:
+        _produto = Produtos()
+        _produto.id_produto = request.form['id_produto']
+        _msg = produto.delete()
+        return jsonify(erro=False, mensagem=_msg)
+    except Exception as e:
+        if len(e.args)> 1:
+            _mensagem, _mensagem_exception = e.args
+        else:
+            _mensagem = 'Erro no banco'
+            _mensagem_exception = e.args
+        return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
