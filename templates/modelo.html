@@ -62,6 +62,7 @@
         <script src="{{ url_for('static', filename='jquery.countdown-2.2.0/jquery.countdown.min.js') }}"></script>
         <script src="{{ url_for('static', filename='sweet-alert/sweetalert.js') }}"></script>        
         <script>
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
             $(".list-group a").addClass("list-group-item list-group-item-action list-group-item-info");
 
                                 
