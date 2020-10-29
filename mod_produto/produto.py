@@ -80,7 +80,7 @@ def deleteProduto():
     try:
         _produto = Produtos()
         _produto.id_produto = request.form['id_produto']
-        _msg = produto.delete()
+        _msg = _produto.delete()
         return jsonify(erro=False, mensagem=_msg)
     except Exception as e:
         if len(e.args)> 1:
