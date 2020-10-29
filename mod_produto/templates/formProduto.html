@@ -3,25 +3,30 @@
 
 {% block content %}
 
-<h2>Novo Produto</h2>
-<form id="addProduto"  enctype="multipart/form-data" >
+{% if produto.id_produto == 0: %}
+<h1>Novo Produto</h1>
+<form id="addProduto" name="addProduto" method="POST" enctype="multipart/form-data">
+{% else: %}
+<h1>Editar Produto: {{ produto.id_produto }}</h1>
+<form id="editProduto" name="editProduto" method="POST" enctype="multipart/form-data">
+{% endif %}
     <div class="form-group">
         <label for="codigo">Código:</label>
-        <input type="text" id="codigo" class="form-control" disabled>
+        <input type="text" value="{{ produto.id_produto }}" name="codigo" id="codigo" class="form-control" disabled>
     </div>
     <div class="form-group">
         <label for="descricao">Descrição do produto:</label>
-        <input type="text" id="descricao" class="form-control" required>
+        <input type="text" value="{{ produto.descricao }}" name="descricao" id="descricao" class="form-control" required>
     </div>
     <div class="form-group">
         <label for="valor">Valor unitário:</label>
-        <input type="number" id="valor" class="form-control" required>
+        <input type="number" value="{{ produto.valor }}" name="valor" id="valor" class="form-control" required>
     </div>
     <div class="form-group" style="clear: both;">
         <label for="imagem">Imagem do produto:</label>
-        <input type="file" id="imagem" class="form-control-file" required>        
+        <input type="file" value="{{ produto.imagem }}" id="imagem" name="imagem" class="form-control-file" required>        
     </div>
-    <button type="submit" class="btn btn-primary"><i class="far fa-save">  Salvar</i></button>
+    <button type="submit" name="salvaProdutoDB" id="sal" class="btn btn-primary"><i class="far fa-save">  Salvar</i></button>
 </form>
 {% endblock %}
 
@@ -44,30 +49,36 @@
         filePreview(this);
     });
 
-    $('#addProduto').submit(function(e){
-
-        e.preventDefault();
-
-        
-        
-        $.post($SCRIPT_ROOT + "{{ url_for('produto.addProduto') }}", {
-
-            descricao:$('#descricao').val(),
-            valor: $('#valor').val(),
-            imagem: $('#imagem').val()
-        }, function(data){
-
-            if(!data.erro){
-
-                swal(data.mensagem,'','success');
+    $('#addProduto').submit(function (e) {
+        e.preventDefault(); // parar o envio para poder fazer manualmente
+        var form = $('#addProduto')[0]; // captura o form
+        var data = new FormData(form); // cria o FormData {Object}
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "{{url_for('produto.addProduto')}}",
+            data: data,
+            processData:false,contentType:false,cache:false,timeout: 600000,
+            // manipular o retorno da requisição
+            success: function (data) {
+                if (!data.erro) {
+                    swal({
+                    title:"",text:data.mensagem,type:"success",confirmButtonClass:"btn-success",confirmButtonText:"Ok",closeOnConfirm:false,closeOnCancel:false
+                    },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.replace($SCRIPT_ROOT + "{{ url_for('produto.formListaProdutos') }}");
+                    }
+                });
             }
-            else{
-
-                swal(data.mensagem,'','error');
-                console.log(data.mensagem_exception);
-
+                else {
+                    swal("", data.mensagem + '\n' + data.mensagem_exception, "error");
+                }
+            },
+                error: function (e) {
+                    console.log(e);
             }
+            })
         })
-    })
 </script>
 {% endblock %}
