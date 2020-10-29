@@ -10,7 +10,10 @@ bp_produto = Blueprint('produto', __name__, url_prefix='/produto', template_fold
 @bp_produto.route("/")
 @validaSessao
 def formListaProdutos():
-    return render_template("formListaProdutos.html")
+    _produto = Produtos()
+    _lista = _produto.selectAll()   
+
+    return render_template("formListaProdutos.html", produtos = _lista)
 
 @bp_produto.route("/formProduto")
 @validaSessao

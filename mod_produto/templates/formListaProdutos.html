@@ -18,12 +18,14 @@
             </tr>
         </thead>
         <tbody>
+        {% for produto in produtos: %}
             <tr>
-                <th scope="row">1</th>
-                <td>seila</td>
-                <td>1.00</td>
-                <td></td>
+                <th scope="row">{{ produto[0] }}</th>
+                <td>{{ produto[1] }}</td>
+                <td>{{ produto[2] }}</td>
+                <td><img alt="{{ produto[1] }}" src="data:image/jpg;base64,{{ produto[3] }}" ></td>
             </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
