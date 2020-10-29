@@ -1,5 +1,8 @@
 {% extends 'modelo.html' %}
 {% block title %} Produtos {% endblock %}
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='listas/listas.css') }}">
+{% endblock %}
 {% block content %}
 
 
@@ -15,6 +18,7 @@
                 <th>Descrição</th>
                 <th>Preço</th>
                 <th>Imagem</th>
+                <th>Opções</th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +29,16 @@
                 <td>{{ produto[1] }}</td>
                 <td>{{ produto[2] }}</td>
                 <td><img alt="{{ produto[1] }}" src="{{ produto[3] }}" width="100px" ></td>
+                <td>
+                    <form id="editProduto" action="{{ url_for('produto.formEditProduto') }}" method="POST" name='editProduto'>
+                        <input type='hidden' name='id_produto' value='{{ produto[0] }}'>
+                        <button type='submit' class="btn btn-warning btn-sm" name='formEditProduto'><i class='fas fa-edit fa-s'></i></button>
+                    </form>
+                    <form style="margin-top: 2px;" name='excluiProduto' method="POST">
+                        <input type='hidden' id="id_produto" name='id_produto' value='{{ produto[0] }}'>
+                        <button type='submit' class="btn btn-danger btn-sm" name='salvaEditaProdutoDB'><i class='fas fa-trash-alt'></i></button>
+                    </form>     
+                </td>
             </tr>
         {% endfor %}
         {% endif %}

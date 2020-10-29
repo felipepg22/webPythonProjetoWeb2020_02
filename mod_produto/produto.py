@@ -21,7 +21,7 @@ def formProduto():
     produto = Produtos()
     return render_template("formProduto.html", produto=produto, content_type='application/json')
 
-@bp_produto.route("/formEditProduto")
+@bp_produto.route("/formEditProduto", methods = ['POST'])
 @validaSessao
 def formEditProduto():
     produto = Produtos()
