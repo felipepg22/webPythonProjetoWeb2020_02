@@ -4,6 +4,7 @@ import hashlib
 
 from mod_login.login import validaSessao
 from mod_cliente.clienteBD import Clientes
+from funcoes import Funcoes
 
 bp_cliente = Blueprint('cliente', __name__, url_prefix='/cliente', template_folder='templates')
 
@@ -48,7 +49,7 @@ def addCliente():
         cliente.telefone = request.form['telefone']
         cliente.email = request.form['email']
         cliente.login = request.form['login']
-        cliente.senha = hashlib.sha3_256(request.form['senha'].encode('utf-8')).hexdigest()
+        cliente.senha = Funcoes.criptografaSenha(request.form['senha'])
         cliente.grupo = request.form['grupo']
         _mensagem = cliente.insert()
         return jsonify(erro = False, mensagem = _mensagem)
@@ -81,8 +82,7 @@ def editCliente():
             cliente.estado = request.form['estado']
             cliente.telefone = request.form['telefone']
             cliente.email = request.form['email']
-            cliente.login = request.form['login']
-            cliente.senha = hashlib.sha3_256(request.form['senha'].encode('utf-8')).hexdigest()
+            cliente.login = request.form['login']            
             cliente.grupo = request.form['grupo']
             
             _mensagem = cliente.update()
