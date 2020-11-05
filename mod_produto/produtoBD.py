@@ -1,5 +1,5 @@
 from BancoBD import Banco
-
+from funcoes import Funcoes
 
 class Produtos():
     def __init__(self, id_produto=0, descricao="", valor=0, imagem="" ):
@@ -68,8 +68,13 @@ class Produtos():
             _sql_data = (self.descricao, self.valor, self.imagem,)
             c.execute(_sql,_sql_data)
             banco.conexao.commit()
+
+            Funcoes.criaLOG('INSERT Produto', 'info')
             return "Produto cadastrado com sucesso!"
+
+            
         except Exception as e:
+            Funcoes.criaLOG(str(e), 'erro')
             raise Exception('Erro ao tentar cadastrar produto!', str(e))
         finally:
             if c:
@@ -87,8 +92,10 @@ class Produtos():
             _sql_data = (self.descricao, self.valor, self.imagem, self.id_produto,)
             c.execute(_sql,_sql_data)
             banco.conexao.commit()
+            Funcoes.criaLOG('UPDATE PRODUTO', 'info')
             return "Produto atualizado com sucesso!"
         except Exception as e:
+            Funcoes.criaLOG(str(e), 'erro')
             raise Exception("Erro ao editar produto!", str(e))
         finally:
             if c:
@@ -106,8 +113,11 @@ class Produtos():
             _sql_data = (self.id_produto,)
             c.execute(_sql,_sql_data)
             banco.conexao.commit()
+
+            Funcoes.criaLOG('DELETE Produto', 'info')
             return "Produto excluído com sucesso!"
         except Exception as e:
+            Funcoes.criaLOG(str(e), 'erro')
             raise Exception("Erro ao tentar excluir produto!", str(e))
         finally:
             if c:

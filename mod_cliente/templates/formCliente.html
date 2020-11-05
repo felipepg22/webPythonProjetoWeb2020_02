@@ -84,10 +84,12 @@
                 <div class="valid-feedback">Login OK!</div>
                 <div class="invalid-feedback">Login já existente! Tente outro!</div>
             </div>
+            {% if cliente.id_cliente == 0: %}
             <div class="form-group col-4">
                 <label class='required-input' for="senha">Senha:</label>
                 <input id="senha" value="{{ cliente.senha }}" name="senha" class="form-control" type="password" required>
             </div>
+            {% endif %}
             <div class="form-group col-2">
                 <label for="grupo">Grupo:</label>
                 <select id="grupo"  name="grupo" class="form-control">

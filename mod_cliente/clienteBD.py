@@ -1,4 +1,6 @@
 from BancoBD import Banco
+from funcoes import Funcoes
+
 
 class Clientes(object):
     def __init__(self, id_cliente=0, nome="", endereco="", numero=0, observacao="", cep="", bairro="", cidade="", estado="SC", telefone="", email="", login="", senha="", grupo="SOLIC"):
@@ -76,10 +78,11 @@ class Clientes(object):
             banco.conexao.commit()
             
             c.close()
-
+            Funcoes.criaLOG('INSERT Cliente', 'info')
             return "Cliente cadastrado com sucesso!"
 
         except Exception as e:
+            Funcoes.criaLOG(str(e), 'erro')
             raise Exception('Erro ao tentar cadastrar cliente!', str(e))
         
     def update(self):
@@ -89,16 +92,17 @@ class Clientes(object):
 
             c = banco.conexao.cursor()
 
-            c.execute("update tb_clientes set nome=%s , endereco=%s , numero=%s, observacao=%s, cep=%s, bairro=%s, cidade=%s, estado=%s, telefone=%s, email=%s, login=%s, senha=%s, grupo=%s where id_cliente = %s",(self.nome, self.endereco, self.numero, self.observacao, self.cep, self.bairro, self.cidade, self.estado, self.telefone, self.email, self.login, self.senha, self.grupo, self.id_cliente))
+            c.execute("update tb_clientes set nome=%s , endereco=%s , numero=%s, observacao=%s, cep=%s, bairro=%s, cidade=%s, estado=%s, telefone=%s, email=%s, login=%s, grupo=%s where id_cliente = %s",(self.nome, self.endereco, self.numero, self.observacao, self.cep, self.bairro, self.cidade, self.estado, self.telefone, self.email, self.login, self.grupo, self.id_cliente))
 
             banco.conexao.commit()
 
             c.close()
             
-            
+            Funcoes.criaLOG('UPDATE Cliente', 'info')
 
             return "Cliente editado com sucesso!"
-        except Exception as e:           
+        except Exception as e:
+            Funcoes.criaLOG(str(e), 'erro')           
             raise Exception("Erro ao editar cliente!", str(e))
     
     def delete(self):
@@ -112,8 +116,11 @@ class Clientes(object):
             banco.conexao.commit()
 
             c.close()
+
+            Funcoes.criaLOG('DELETE Cliente', 'info')
             return "Cliente excluído com sucesso!"
         except Exception as e:
+            Funcoes.criaLOG(str(e), 'erro')
             raise Exception("Erro ao tentar excluir", str(e))
 
     def selectLogin(self):

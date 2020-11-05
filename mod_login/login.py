@@ -5,6 +5,7 @@ import hashlib
 
 
 from mod_cliente.clienteBD import Clientes
+from funcoes import Funcoes
 
 bp_login = Blueprint('login', __name__, url_prefix='/', template_folder='templates')
 
@@ -30,7 +31,9 @@ def login():
 
 @bp_login.route("/logoff")
 def logoff():
-    session.clear()
+
+    Funcoes.criaLOG('Logoff', 'info')
+    session.clear()    
     return redirect(url_for('login.login'))
 
 @bp_login.route("/login", methods=['POST'])
@@ -40,7 +43,7 @@ def validaLogin():
     _pass = request.form['senha']
 
     cliente.login = _name
-    cliente.senha = hashlib.sha3_256(_pass.encode('utf-8')).hexdigest()
+    cliente.senha = Funcoes.criptografaSenha(_pass)
 
     try:
         cliente.selectLogin()
@@ -54,6 +57,8 @@ def validaLogin():
             session['login'] = cliente.login
             session['grupo'] = cliente.grupo
 
+            Funcoes.criaLOG('Login', 'info')
+
             
             return jsonify(erro = False, mensagem = f'Bem vindo {cliente.nome}!')
         else:
@@ -61,5 +66,6 @@ def validaLogin():
             return jsonify(erro = True, mensagem = "Usuário ou senha incorretos!")
     except Exception as e:
         _mensagem, _mensagem_exception = e.args
+        Funcoes.criaLOG(f'{_mensagem} Excecao: {_mensagem_exception}', 'error')
         return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
 
