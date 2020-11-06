@@ -25,19 +25,21 @@
             </tr>
         </thead>
         <tbody>
+            {% for pedido in pedidos: %}    
             <tr>
-                <th scope="row">1</th>
-                <td>abc</td>
-                <td>123213213</td>
-                <td>Rua dahora</td>
-                <td>111111</td>
-                <td>222222</td>
-                <td>seila</td>
-                <td>tanto faz</td>
-                <td>SC</td>
-                <td>11/11/11</td>
-                <td>Algum produto</td>
+                <th scope="row">{{ pedido['ID'] }}</th>
+                <td>{{ pedido['Nome'] }}</td>
+                <td>{{ pedido['Telefone'] }}</td>
+                <td>{{ pedido['Endereco'] }}</td>
+                <td>{{ pedido['Numero'] }}</td>
+                <td>{{ pedido['CEP'] }}</td>
+                <td>{{ pedido['Bairro'] }}</td>
+                <td>{{ pedido['Cidade'] }}</td>
+                <td>{{ pedido['Observacao'] }}</td>
+                <td>{{ pedido['Data_hora'] }}</td>
+                <td></td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

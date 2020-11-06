@@ -1,3 +1,5 @@
+import json
+
 from BancoBD import Banco
 from funcoes import Funcoes
 
@@ -156,3 +158,6 @@ class Clientes(object):
             return result
         except Exception as e:
             raise Exception(str(e))
+    
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
