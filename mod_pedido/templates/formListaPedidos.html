@@ -22,6 +22,7 @@
                 <th>Obs</th>
                 <th>Data/Hora</th>
                 <th>Produtos</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -37,9 +38,29 @@
                 <td>{{ pedido['Cidade'] }}</td>
                 <td>{{ pedido['Observacao'] }}</td>
                 <td>{{ pedido['Data_hora'] }}</td>
-                <td></td>
+                <td>
+                    <button type="button" id="mostra_produtos" class="btn btn-info"><i class="fas fa-list-alt"></i></button>
+                </td>
+                <td>
+                    <form action="{{ url_for('pedidos.formEditPedido') }}" method="POST">
+                        <input type="hidden" id="id_pedido" name="id_pedido" value="{{ pedido['ID'] }}">
+                        <button type="submit">Editar</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
+        </tbody>
+    </table>
+    <h5>Produtos do Pedido <span id="id_pedido_produto"></span></h5>
+    <table class="table table-striped">
+        <thead>
+            <th>Nome</th>
+            <th>Quantidade</th>
+            <th>Valor</th>
+            <th>Observação</th>
+        </thead>
+        <tbody id="tabela_pedido_produtos">
+            
         </tbody>
     </table>
 </div>
@@ -48,5 +69,25 @@
 {% block js%}
 <script>
     $('thead tr th').attr('scope','col');
+
+    $("[id='mostra_produtos']").click(function(){
+
+        let id_pedido = this.parentElement.parentElement.firstElementChild.textContent;
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.selectProdutosByPedido') }}", {
+
+            id_pedido:id_pedido
+        }, function(data){
+
+            if(!data.erro){
+
+                console.log(data);
+            }
+            else{
+
+                console.log(data.mensagem_exception);
+            }
+        })
+    })
 </script>
 {% endblock %}

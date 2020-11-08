@@ -1,3 +1,5 @@
+import json
+
 from BancoBD import Banco
 from funcoes import Funcoes
 
@@ -39,7 +41,7 @@ class Produtos():
         try:
             banco = Banco()
             c = banco.conexao.cursor()
-            _sql = "select id_produto, descricao, valor, CONVERT(imagem USING utf8) from tb_produtos where id_produto = %s"
+            _sql = "select id_produto, descricao, CONVERT(valor, CHAR), CONVERT(imagem USING utf8) from tb_produtos where id_produto = %s"
             _sql_data = (self.id_produto,)
             c.execute(_sql,_sql_data)
             for linha in c:
@@ -125,4 +127,5 @@ class Produtos():
             if banco:
                 banco.conexao.close()
 
- 
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)

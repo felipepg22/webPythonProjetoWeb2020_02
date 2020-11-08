@@ -13,7 +13,7 @@
         <div class="form-row">
             <div class="form-group col-2">
                 <label for="id_pedido">Número do Pedido:</label>
-                <input id="id_pedido" class="form-control" type="text" readonly>
+                <input id="id_pedido" value="{{ pedido.id_pedido }}" class="form-control" type="text" readonly>
             </div>
             {% if pedido.id_pedido == 0: %}
             <div class="form-group col-2">
@@ -23,7 +23,7 @@
             {% else: %}
             <div class="form-group col-2">
                 <label for="codigoCliente">Código Cliente:</label>
-                <input id="codigoCliente" class="form-control" type="text" readonly>
+                <input id="codigoCliente" value="{{ pedido.id_cliente }}" class="form-control" type="text" readonly>
             </div>
             {% endif %}
             <div class="form-group col-4">
@@ -61,32 +61,31 @@
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="data_hora">Data/Hora:</label>
-                <input id="data_hora" class="form-control" type="datetime-local" required>
+                <input id="data_hora" value="{{ pedido.data_hora }}" class="form-control" type="datetime-local" required>
             </div>
             <div class="form-group col-8">
                 <label for="observacao">Observações:</label>
-                <textarea id="observacao" class="form-control" type="text"></textarea>
+                <textarea id="observacao" value="{{ pedido.observacao }}" class="form-control" type="text"></textarea>
             </div>
         </div>
         {% if pedido.id_pedido > 0: %}
         <hr style="border-top: 3px solid #bbb;">
         <div class="form-row">
             <div class="form-group col-2">
-                <label for="produto">Produto:</label>
-                <select id="produto" class="form-control" required>
+                <label for="id_produto">Produto:</label>
+                <select id="id_produto" class="form-control" name="id_produto" required>
                     <option value=""></option>
                     {% for produto in produtos: %}
-                    <option value="produto[0]">{{ produto[1] }}</option>
+                    <option value="{{produto[0]}}">{{ produto[1] }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group col-2">
-                <label for="descricaoProduto">Descrição:</label>
-                <input id="descricaoProduto" class="form-control" type="text" readonly>
+                <img id="imagemProduto" width="150">
             </div>
             <div class="form-group col-4">
-                <label for="preco">Preço:</label>
-                <input id="preco" class="form-control" type="text" readonly>
+                <label for="valor">Preço:</label>
+                <input id="valor" name="valor" class="form-control" type="text" readonly>
             </div>
             <div class="form-group col-2">
                 <label for="quantidade">Quantidade:</label>
@@ -104,7 +103,7 @@
             </div>
         </div>
         
-        <button type="submit" class="btn btn-primary"><i class="fas fa-plus">  Adicionar</i></button>
+        <button type="button" id="addProdutoPedido" class="btn btn-primary"><i class="fas fa-plus">  Adicionar</i></button>
         {% endif %}
         <button type="submit" class="btn btn-success"><i class="far fa-save">  Salvar</i></button>
         <button class="btn btn-danger"><i class="fas fa-trash-alt">  Excluir</i></button>
@@ -114,6 +113,29 @@
 {% block js %}
 <script>
 
+    $('#id_produto').change(function(e){
+
+        let id_produto = e.target.value;
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaProdutoById') }}", {
+
+            id_produto:id_produto
+        }, function(data){
+
+            if(!data.erro){
+
+                let produto = $.parseJSON(data.produto);
+
+                $('#imagemProduto').attr('src', produto.imagem);
+                $('#valor').val(produto.valor);
+                $('#quantidade').val(1);
+            }
+            else{
+
+                console.log(data.mensagem_exception);
+            }
+        })
+    });
     $('#id_cliente').keyup(function(e){
 
         let id_cliente = e.target.value; // Pega o que está sendo digitado no input
@@ -173,6 +195,30 @@
                 }, 1000)
             }
 
+            else{
+                swal(data.mensagem, '', 'error');
+                console.log(data.mensagem_exception);
+            }
+        })
+    })
+
+    $('#addProdutoPedido').click(function(e){
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.addProdutoPedido') }}", {
+
+            id_pedido: $('#id_pedido').val(),
+            id_produto: $('#id_produto').val(),
+            quantidade: $('#quantidade').val(),
+            valor: $('#valor').val(),
+            observacao:$('#observacoesProduto').val()
+        }, function(data){
+
+            if(!data.erro){
+
+                swal(data.mensagem, '', 'success');
+
+                
+            }
             else{
                 swal(data.mensagem, '', 'error');
                 console.log(data.mensagem_exception);
