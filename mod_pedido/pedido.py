@@ -91,7 +91,7 @@ def addPedido():
         else:
             return jsonify(erro = True,mensagem = "Erro ao tentar adicionar pedido!" ,mensagem_exception = str(e))
 
-@bp_pedido.route("/addProdutoPedido")
+@bp_pedido.route("/addProdutoPedido", methods = ['POST'])
 @validaSessao
 def addProdutoPedido():
     try:

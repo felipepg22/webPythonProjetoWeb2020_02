@@ -102,11 +102,11 @@ class PedidosProdutos():
             banco = Banco()
 
             c = banco.conexao.cursor(pymysql.cursors.DictCursor)
-            _sql = 'SELECT tp.descricao as Descricao,tpp.id_pedido as ID_PEDIDO, tpp.quantidade as Quantidade, tpp.valor as Valor FROM tb_produtos tp INNER JOIN tb_pedido_produtos tpp ON tp.id_produto = tpp.id_produto GROUP BY tp.descricao HAVING tpp.id_pedido = %s'
+            _sql = 'SELECT tp.descricao as Descricao,tpp.id_pedido as ID_PEDIDO, tpp.quantidade as Quantidade, CONVERT(tpp.valor, CHAR) as Valor, tpp.observacao as Observacao FROM tb_produtos tp INNER JOIN tb_pedido_produtos tpp ON tp.id_produto = tpp.id_produto GROUP BY tp.descricao HAVING tpp.id_pedido = %s'
             _sql_data = (self.id_pedido)
             c.execute(_sql, _sql_data)
 
-            result = c.fetchone()
+            result = c.fetchall()
 
             return result
         

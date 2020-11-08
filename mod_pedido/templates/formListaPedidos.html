@@ -51,7 +51,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <h5>Produtos do Pedido <span id="id_pedido_produto"></span></h5>
+    <h5>Produtos do Pedido <span id="id_pedido_produtos"></span></h5>
     <table class="table table-striped">
         <thead>
             <th>Nome</th>
@@ -80,8 +80,20 @@
         }, function(data){
 
             if(!data.erro){
-
-                console.log(data);
+                $('#id_pedido_produtos').text(id_pedido);
+                $('#tabela_pedido_produtos').empty();
+                data.produtos.forEach(produto => {
+                    
+                    $('#tabela_pedido_produtos').append(`
+                        <tr>
+                            <td>${produto['Descricao']}</td>
+                            <td>${produto['Quantidade']}</td>
+                            <td>${produto['Valor']}</td>
+                            <td>${produto['Observacao']}</td>
+                        </tr>
+                    
+                    `)
+                });
             }
             else{
 

@@ -113,6 +113,7 @@
 {% block js %}
 <script>
 
+    
     $('#id_produto').change(function(e){
 
         let id_produto = e.target.value;
@@ -129,6 +130,7 @@
                 $('#imagemProduto').attr('src', produto.imagem);
                 $('#valor').val(produto.valor);
                 $('#quantidade').val(1);
+                $('#total').val(1 * produto.valor);
             }
             else{
 
@@ -136,6 +138,7 @@
             }
         })
     });
+    
     $('#id_cliente').keyup(function(e){
 
         let id_cliente = e.target.value; // Pega o que está sendo digitado no input
@@ -224,6 +227,13 @@
                 console.log(data.mensagem_exception);
             }
         })
+    })
+
+    $('#quantidade').change(function(e){
+
+        let valor_produto = $('#valor').val();
+
+        $('#total').val(e.target.value * valor_produto);
     })
 </script>
 {% endblock %}
