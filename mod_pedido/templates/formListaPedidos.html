@@ -6,7 +6,62 @@
 <a href="{{ url_for('pedidos.formPedido')}}">
     <button  class="btn btn-primary"><i class="fas fa-plus-square">  Novo Pedido</i></button>    
 </a>
-
+<!-- Modal para adicionar produtos no pedido -->
+<div class="modal fade" id="addProduto" tabindex="-1" role="dialog" aria-labelledby="addProduto" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="novaComanda">Adicionar Produto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addProdutoPedido">
+              <input type="hidden" name="id_pedido" id="id_pedido_add_produto">
+            <div class="form-row">
+                <div class="form-group col-8">
+                    <label for="id_produto">Produto:</label>
+                    <select id="id_produto" class="form-control" name="id_produto" required>
+                        <option value=""></option>
+                        {% for produto in produtos: %}
+                        <option value="{{produto[0]}}">{{ produto[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-2">
+                    <img id="imagemProduto" width="150">
+                </div>                
+                <div class="form-group col-4">
+                    <label for="valor">Preço:</label>
+                    <input id="valor" name="valor" class="form-control" type="text" readonly>
+                </div>
+                
+                <div class="form-group col-2">
+                    <label for="quantidade">Quantidade:</label>
+                    <input id="quantidade" class="form-control" type="number" required>
+                </div>
+                
+            </div>
+            <div class="form-row">
+                <div class="form-group col-4">
+                    <label for="total">Total:</label>
+                    <input id="total" class="form-control" type="text" readonly>
+                </div>
+                <div class="form-group col-6">
+                    <label for="observacoesProduto">Observações:</label>
+                    <input id="observacoesProduto" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" style="width: auto;" data-dismiss="modal">Fechar</button>
+                <button type="submit" id="botaoSubmit" class="btn btn-success">Adicionar</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 <div style="margin-top: 20px;">
     <table class="table table-striped">
         <thead>
@@ -44,8 +99,9 @@
                 <td>
                     <form action="{{ url_for('pedidos.formEditPedido') }}" method="POST">
                         <input type="hidden" id="id_pedido" name="id_pedido" value="{{ pedido['ID'] }}">
-                        <button type="submit">Editar</button>
+                        <button type="submit" title="Editar Pedido" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                     </form>
+                    <button type="button" id="botaoAddProduto" class="btn btn-success" data-toggle="modal" data-target="#addProduto" title="Adicionar produto" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
                 </td>
             </tr>
             {% endfor %}
@@ -54,7 +110,7 @@
     <h5>Produtos do Pedido <span id="id_pedido_produtos"></span></h5>
     <table class="table table-striped">
         <thead>
-            <th>Nome</th>
+            <th scope="row">Nome</th>
             <th>Quantidade</th>
             <th>Valor</th>
             <th>Observação</th>
@@ -67,8 +123,15 @@
 {% endblock %}
 
 {% block js%}
+
 <script>
     $('thead tr th').attr('scope','col');
+
+    $("[id='botaoAddProduto']").click(function(e){
+
+        let id_pedido = this.parentElement.parentElement.firstElementChild.textContent;
+        $('#id_pedido_add_produto').val(id_pedido);
+    })
 
     $("[id='mostra_produtos']").click(function(){
 
@@ -101,5 +164,62 @@
             }
         })
     })
+
+    $('#id_produto').change(function(e){
+
+        let id_produto = e.target.value;
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaProdutoById') }}", {
+
+            id_produto:id_produto
+        }, function(data){
+
+            if(!data.erro){
+
+                let produto = $.parseJSON(data.produto);
+
+                $('#imagemProduto').attr('src', produto.imagem);
+                $('#valor').val(produto.valor);
+                $('#quantidade').val(1);
+                $('#total').val(1 * produto.valor);
+            }
+            else{
+
+                console.log(data.mensagem_exception);
+            }
+        })
+});
+
+$('#addProdutoPedido').submit(function(e){
+
+    e.preventDefault();
+    $.post($SCRIPT_ROOT + "{{ url_for('pedidos.addProdutoPedido') }}", {
+
+        id_pedido: $('#id_pedido_add_produto').val(),
+        id_produto: $('#id_produto').val(),
+        quantidade: $('#quantidade').val(),
+        valor: $('#valor').val(),
+        observacao:$('#observacoesProduto').val()
+    }, function(data){
+
+        if(!data.erro){
+
+            swal(data.mensagem, '', 'success');
+
+            
+        }
+        else{
+            swal(data.mensagem, '', 'error');
+            console.log(data.mensagem_exception);
+        }
+    })
+})
+
+$('#quantidade').change(function(e){
+
+    let valor_produto = $('#valor').val();
+
+    $('#total').val(e.target.value * valor_produto);
+})
 </script>
 {% endblock %}

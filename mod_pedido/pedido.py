@@ -13,7 +13,10 @@ bp_pedido = Blueprint('pedidos',__name__, url_prefix='/pedidos', template_folder
 def formListaPedidos():
     _pedido = Pedidos()
     _lista_pedidos = _pedido.selectAll()
-    return render_template("formListaPedidos.html", pedidos = _lista_pedidos)
+
+    _produto = Produtos()
+    _lista_produtos = _produto.selectAll()
+    return render_template("formListaPedidos.html", pedidos = _lista_pedidos, produtos = _lista_produtos)
 
 @bp_pedido.route("/formPedido")
 @validaSessao
