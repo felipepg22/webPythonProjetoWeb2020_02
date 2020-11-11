@@ -5,7 +5,7 @@ import hashlib
 
 
 from mod_cliente.clienteBD import Clientes
-from funcoes import Funcoes
+from funcoes import Funcoes, LOG
 
 bp_login = Blueprint('login', __name__, url_prefix='/', template_folder='templates')
 
@@ -32,7 +32,7 @@ def login():
 @bp_login.route("/logoff")
 def logoff():
 
-    Funcoes.criaLOG('Logoff', 'info')
+    Funcoes.criaLOG('Logoff', LOG.info)
     session.clear()    
     return redirect(url_for('login.login'))
 
@@ -57,7 +57,7 @@ def validaLogin():
             session['login'] = cliente.login
             session['grupo'] = cliente.grupo
 
-            Funcoes.criaLOG('Login', 'info')
+            Funcoes.criaLOG('Login', LOG.info)
 
             
             return jsonify(erro = False, mensagem = f'Bem vindo {cliente.nome}!')

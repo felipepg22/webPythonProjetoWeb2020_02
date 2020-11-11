@@ -3,11 +3,13 @@ from enum import Enum
 import hashlib, logging, datetime
 from flask import session
 
+class LOG(Enum):
+    info = 'info'
+    warning = 'warning'
+    error = 'error'
 
 
 class Funcoes(metaclass=ABCMeta):#Cria classe abstrata
-
-
 
     #método abstrato
     @abstractmethod
@@ -19,11 +21,11 @@ class Funcoes(metaclass=ABCMeta):#Cria classe abstrata
         logging.basicConfig(filename='abcBolinhas.log', format='%(levelname)s| %(name)s | %(asctime)s | %(message)s ', datefmt='%d/%m/%Y %I:%M:%S %p', level=logging.INFO)
         
         try:
-            if tipo == 'info':            
+            if tipo == LOG.info:            
                 logging.info(f'{mensagem} Usuario: {session["usuario"]}')
-            elif tipo == 'warning':
+            elif tipo == LOG.warning:
                 logging.warning(f'{mensagem} Usuario: {session["usuario"]}')
-            elif tipo =='erro':
+            elif tipo == LOG.error:
                 logging.error(f'{mensagem} Usuario: {session["usuario"]}')
         except Exception as e:
             print(str(e))

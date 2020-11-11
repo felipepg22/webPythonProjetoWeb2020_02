@@ -1,7 +1,7 @@
 import json
 
 from BancoBD import Banco
-from funcoes import Funcoes
+from funcoes import Funcoes, LOG
 
 class Produtos():
     def __init__(self, id_produto=0, descricao="", valor=0, imagem="" ):
@@ -63,20 +63,19 @@ class Produtos():
         banco = None
         c = None
         try:
-            banco = Banco()
-            print(self.imagem)
+            banco = Banco()            
             c = banco.conexao.cursor()
             _sql = "insert into tb_produtos(descricao, valor, imagem) values (%s,%s,%s)"
             _sql_data = (self.descricao, self.valor, self.imagem,)
             c.execute(_sql,_sql_data)
             banco.conexao.commit()
 
-            Funcoes.criaLOG('INSERT Produto', 'info')
+            Funcoes.criaLOG(f'INSERT Produto {c.lastrowid}', LOG.info)
             return "Produto cadastrado com sucesso!"
 
             
         except Exception as e:
-            Funcoes.criaLOG(str(e), 'erro')
+            Funcoes.criaLOG(str(e), LOG.error)
             raise Exception('Erro ao tentar cadastrar produto!', str(e))
         finally:
             if c:
@@ -94,10 +93,10 @@ class Produtos():
             _sql_data = (self.descricao, self.valor, self.imagem, self.id_produto,)
             c.execute(_sql,_sql_data)
             banco.conexao.commit()
-            Funcoes.criaLOG('UPDATE PRODUTO', 'info')
+            Funcoes.criaLOG(f'UPDATE PRODUTO {self.id_produto}', 'info')
             return "Produto atualizado com sucesso!"
         except Exception as e:
-            Funcoes.criaLOG(str(e), 'erro')
+            Funcoes.criaLOG(str(e), LOG.error)
             raise Exception("Erro ao editar produto!", str(e))
         finally:
             if c:
@@ -116,10 +115,10 @@ class Produtos():
             c.execute(_sql,_sql_data)
             banco.conexao.commit()
 
-            Funcoes.criaLOG('DELETE Produto', 'info')
+            Funcoes.criaLOG(f'DELETE Produto {self.id_produto}', LOG.info)
             return "Produto excluído com sucesso!"
         except Exception as e:
-            Funcoes.criaLOG(str(e), 'erro')
+            Funcoes.criaLOG(str(e), LOG.error)
             raise Exception("Erro ao tentar excluir produto!", str(e))
         finally:
             if c:

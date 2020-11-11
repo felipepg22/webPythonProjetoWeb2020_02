@@ -1,6 +1,8 @@
 from BancoBD import Banco
 import pymysql
 
+from funcoes import Funcoes, LOG
+
 class Pedidos():
     def __init__(self, id_pedido=0, data_hora="", id_cliente=0, observacao=""):
         self.id_pedido = id_pedido
@@ -73,10 +75,12 @@ class Pedidos():
             c.execute(_sql, _sql_data)
 
             banco.conexao.commit()
+            Funcoes.criaLOG(f'INSERT pedido {c.lastrowid}', LOG.info)
 
             return 'Pedido cadastrado com sucesso!'
 
         except Exception as e:
+            Funcoes.criaLOG(str(e), LOG.error)
             raise Exception('Erro ao cadastrar pedido', str(e))
 
         finally:
@@ -131,10 +135,12 @@ class PedidosProdutos():
             c.execute(_sql, _sql_data)
 
             banco.conexao.commit()
+            Funcoes.criaLOG(f'INSERT produto {self.id_produto} pedido {self.id_produto}')
 
             return 'Produto cadastrado na comanda'
 
         except Exception as e:
+            Funcoes.criaLOG(str(e), LOG.error)
             raise Exception('Erro ao cadastrar produto na comanda', str(e))
 
         finally:
