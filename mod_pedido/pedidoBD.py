@@ -106,7 +106,7 @@ class PedidosProdutos():
             banco = Banco()
 
             c = banco.conexao.cursor(pymysql.cursors.DictCursor)
-            _sql = 'SELECT tp.descricao as Descricao,tpp.id_pedido as ID_PEDIDO, tpp.quantidade as Quantidade, CONVERT(tpp.valor, CHAR) as Valor, tpp.observacao as Observacao FROM tb_produtos tp INNER JOIN tb_pedido_produtos tpp ON tp.id_produto = tpp.id_produto WHERE tpp.id_pedido = %s'
+            _sql = 'SELECT tp.descricao as Descricao,tpp.id_pedido as ID_PEDIDO, tpp.quantidade as Quantidade, CONVERT(tpp.valor, CHAR) as Valor, tpp.observacao as Observacao, tpp.id_produto as ID_PRODUTO FROM tb_produtos tp INNER JOIN tb_pedido_produtos tpp ON tp.id_produto = tpp.id_produto WHERE tpp.id_pedido = %s'
             _sql_data = (self.id_pedido)
             c.execute(_sql, _sql_data)
 
@@ -135,7 +135,7 @@ class PedidosProdutos():
             c.execute(_sql, _sql_data)
 
             banco.conexao.commit()
-            Funcoes.criaLOG(f'INSERT produto {self.id_produto} pedido {self.id_produto}')
+            Funcoes.criaLOG(f'INSERT produto {self.id_produto} pedido {self.id_produto}', LOG.info)
 
             return 'Produto cadastrado na comanda'
 
@@ -149,4 +149,54 @@ class PedidosProdutos():
             if banco:
                 banco.conexao.close()
 
-    
+    def updateQuantidadeProduto(self):
+        banco = None
+        c = None
+        try:
+            banco = Banco()
+            c = banco.conexao.cursor()
+            _sql = 'UPDATE tb_pedido_produtos SET quantidade = %s WHERE id_pedido = %s AND id_produto = %s'
+            _sql_data = (self.quantidade, self.id_pedido, self.id_produto)
+            c.execute(_sql, _sql_data)
+            banco.conexao.commit()
+            
+            Funcoes.criaLOG(f'UPDATE quantidade produto {self.id_produto} pedido {self.id_pedido}', LOG.info)
+
+            return 'Produto atualizado com sucesso!'
+        except Exception as e:
+            Funcoes.criaLOG(str(e), LOG.error)
+            raise Exception('Erro ao atualizar produto', str(e))
+
+        finally:
+            if c:
+                c.close()
+            if banco:
+                banco.conexao.close()
+
+    def deleteProdutoPedido(self):
+        banco = None
+        c = None
+        try:
+            banco = Banco()
+
+            c = banco.conexao.cursor()
+
+            _sql = 'DELETE FROM tb_pedido_produtos WHERE id_pedido = %s AND id_produto = %s'
+            _sql_data = (self.id_pedido, self.id_produto)
+
+            c.execute(_sql, _sql_data)
+
+            banco.conexao.commit()
+
+            Funcoes.criaLOG(f'DELETE produto {self.id_produto} pedido {self.id_pedido}')
+
+            return 'Produto deletado do pedido'
+        except Exception as e:
+            Funcoes.criaLOG(str(e), LOG.error)
+            raise Exception('Erro ao deletar produto do pedido', str(e))
+
+        finally:
+            if c:
+                c.close()
+            if banco:
+                banco.conexao.close()
