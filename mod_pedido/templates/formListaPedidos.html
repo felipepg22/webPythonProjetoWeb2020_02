@@ -204,9 +204,10 @@
                 $("[id='editarQuantidade']").click(function(e){
 
                     let id_pedido = this.parentElement.firstElementChild.value;
-                    let id_produto = this.parentNode.children[1].value
+                    let id_produto = this.parentNode.children[1].value;
+                    let quantidade = this.parentNode.parentNode.children[1].textContent;                    
                     
-                    formEditarQuantidade(id_pedido, id_produto);
+                    formEditarQuantidade(id_pedido, id_produto, quantidade);
                     });
             }
             else{
@@ -216,16 +217,44 @@
         })
     })
 
-    function formEditarQuantidade(id_pedido, id_produto){
+    function formEditarQuantidade(id_pedido, id_produto, quantidade){
 
-        console.log(id_pedido);
-        console.log(id_produto);
+        
         $('#id_pedido_update_produto').val(id_pedido);
         $('#id_produto_update_produto').val(id_produto);
+        $('#quantidade_update_produto').val(quantidade);
 
         $('#alteraProduto').modal();
 
     }
+
+    $('#alteraProdutoPedido').submit(function(e){
+
+        e.preventDefault();
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.updateQuantidadeProduto') }}",{
+
+            id_pedido: $('#id_pedido_update_produto').val(),
+            id_produto: $('#id_produto_update_produto').val(),
+            quantidade:$('#quantidade_update_produto').val()
+        }, function(data){
+
+            if(!data.erro){
+
+                swal(data.mensagem, '', 'success')
+
+                setTimeout(function(){
+
+                    window.location.replace($SCRIPT_ROOT + "{{ url_for('pedidos.formListaPedidos') }}")
+                }, 1000)
+            }
+            else{
+
+                swal(data.mensagem, '', 'error')
+                console.log(data.mensagem_exception)
+            }
+        })
+    })
     $('#id_produto').change(function(e){
 
         let id_produto = e.target.value;
