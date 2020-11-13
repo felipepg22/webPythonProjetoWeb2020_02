@@ -6,7 +6,7 @@
     {% if pedido.id_pedido == 0: %}
     <h2>Novo Pedido</h2>
     <form id="addPedido">
-    {% else: %}
+    {% else: %}    
     <h2>Editar Pedido</h2>
     <form id="editPedido">
     {% endif %}
@@ -71,6 +71,10 @@
 {% block js %}
 <script>
 
+$('#data_hora').change(function(e){
+
+    console.log(e.target.value);
+})
 function buscaClienteById(id_cliente){
     $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaClienteById') }}", {
 
@@ -144,6 +148,35 @@ function buscaClienteById(id_cliente){
         })
     })
 
+    $('#editPedido').submit(function(e){
+
+        e.preventDefault();
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.editPedido') }}", {
+
+            id_pedido:$('#id_pedido').val(),
+            id_cliente:$('#id_cliente').val(),
+            data_hora:$('#data_hora').val(),
+            observacao:$('#observacao').val()
+        }, function(data){
+
+            if(!data.erro){
+
+                swal(data.mensagem, '', 'success');
+
+                setTimeout(function(){
+
+                    window.location.replace($SCRIPT_ROOT + "{{ url_for('pedidos.formListaPedidos') }}");
+                }, 1000)
+            }
+
+            else{
+
+                swal(data.mensagem, '', 'error');
+                console.log(data.mensagem_exception);
+            }
+        })
+    })
     $(document).ready(function(){
 
         let id_cliente = $('#id_cliente').val();

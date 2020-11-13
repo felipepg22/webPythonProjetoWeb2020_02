@@ -44,16 +44,14 @@ class Pedidos():
             _sql_data = (self.id_pedido)
 
             c.execute(_sql, _sql_data)
-
+            
             for linha in c:
                 self.id_pedido = linha[0]
-                self.data_hora = linha[1]
+                self.data_hora = str(linha[1].date()) + 'T' + str(linha[1].time())#Necessário para poder aparecer no input de datetime-local
                 self.id_cliente = linha[2]
                 self.observacao = linha[3]
-
-            return 'Pedido buscado com sucesso!'
-
-            return result
+            
+            return 'Pedido buscado com sucesso!'            
 
         except Exception as e:
             raise Exception('Erro ao buscar pedido!', str(e))
@@ -77,12 +75,39 @@ class Pedidos():
             banco.conexao.commit()
             Funcoes.criaLOG(f'INSERT pedido {c.lastrowid}', LOG.info)
 
-            return 'Pedido cadastrado com sucesso!'
+            return 'Pedido cadastrado com sucesso!'    
 
         except Exception as e:
             Funcoes.criaLOG(str(e), LOG.error)
             raise Exception('Erro ao cadastrar pedido', str(e))
 
+        finally:
+            if c:
+                c.close()
+            if banco:
+                banco.conexao.close()
+
+    def update(self):
+        banco = None
+        c = None
+        try:
+            banco = Banco()
+
+            c = banco.conexao.cursor()
+            _sql = 'UPDATE tb_pedidos SET id_cliente = %s, data_hora = %s, observacao = %s WHERE id_pedido = %s'
+            _sql_data = (self.id_cliente, self.data_hora, self.observacao, self.id_pedido)
+
+            c.execute(_sql, _sql_data)
+
+            banco.conexao.commit()
+            Funcoes.criaLOG(f'UPDATE pedido {self.id_pedido}', LOG.info)
+
+            return 'Pedido atualizado com sucesso!'
+
+        except Exception as e:
+            Funcoes.criaLOG(str(e), LOG.error)
+            raise Exception('Erro ao atualizar pedido', str(e))
+    
         finally:
             if c:
                 c.close()
