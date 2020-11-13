@@ -14,18 +14,12 @@
             <div class="form-group col-2">
                 <label for="id_pedido">Número do Pedido:</label>
                 <input id="id_pedido" value="{{ pedido.id_pedido }}" class="form-control" type="text" readonly>
-            </div>
-            {% if pedido.id_pedido == 0: %}
+            </div>            
             <div class="form-group col-2">
                 <label for="id_cliente">Código Cliente:</label>
-                <input id="id_cliente" class="form-control" type="text" required>
+                <input id="id_cliente" value="{{pedido.id_cliente}}" class="form-control" type="text" required>
             </div>
-            {% else: %}
-            <div class="form-group col-2">
-                <label for="codigoCliente">Código Cliente:</label>
-                <input id="codigoCliente" value="{{ pedido.id_cliente }}" class="form-control" type="text" readonly>
-            </div>
-            {% endif %}
+            
             <div class="form-group col-4">
                 <label for="nomeCliente">Nome Cliente:</label>
                 <input id="nomeCliente" class="form-control" type="text" readonly>
@@ -68,84 +62,20 @@
                 <textarea id="observacao" value="{{ pedido.observacao }}" class="form-control" type="text"></textarea>
             </div>
         </div>
-        {% if pedido.id_pedido > 0: %}
-        <hr style="border-top: 3px solid #bbb;">
-        <div class="form-row">
-            <div class="form-group col-2">
-                <label for="id_produto">Produto:</label>
-                <select id="id_produto" class="form-control" name="id_produto" required>
-                    <option value=""></option>
-                    {% for produto in produtos: %}
-                    <option value="{{produto[0]}}">{{ produto[1] }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group col-2">
-                <img id="imagemProduto" width="150">
-            </div>
-            <div class="form-group col-4">
-                <label for="valor">Preço:</label>
-                <input id="valor" name="valor" class="form-control" type="text" readonly>
-            </div>
-            <div class="form-group col-2">
-                <label for="quantidade">Quantidade:</label>
-                <input id="quantidade" class="form-control" type="number" required>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-4">
-                <label for="total">Total:</label>
-                <input id="total" class="form-control" type="text" readonly>
-            </div>
-            <div class="form-group col-6">
-                <label for="observacoesProduto">Observações:</label>
-                <input id="observacoesProduto" class="form-control" type="text">
-            </div>
-        </div>
         
-        <button type="button" id="addProdutoPedido" class="btn btn-primary"><i class="fas fa-plus">  Adicionar</i></button>
-        {% endif %}
         <button type="submit" class="btn btn-success"><i class="far fa-save">  Salvar</i></button>
-        <button class="btn btn-danger"><i class="fas fa-trash-alt">  Excluir</i></button>
+        
     </form>
 {% endblock %}
 
 {% block js %}
 <script>
 
-    
-    $('#id_produto').change(function(e){
-
-        let id_produto = e.target.value;
-
-        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaProdutoById') }}", {
-
-            id_produto:id_produto
-        }, function(data){
-
-            if(!data.erro){
-
-                let produto = $.parseJSON(data.produto);
-
-                $('#imagemProduto').attr('src', produto.imagem);
-                $('#valor').val(produto.valor);
-                $('#quantidade').val(1);
-                $('#total').val(1 * produto.valor);
-            }
-            else{
-
-                console.log(data.mensagem_exception);
-            }
-        })
-    });
-    
-    $('#id_cliente').keyup(function(e){
-
-        let id_cliente = e.target.value; // Pega o que está sendo digitado no input
-        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaClienteById') }}", {
+function buscaClienteById(id_cliente){
+            $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaClienteById') }}", {
 
             id_cliente:id_cliente
-        }, function(data){
+            }, function(data){
 
             if(data.erro){
 
@@ -173,7 +103,16 @@
                 $('#bairro').val("");
                 $('#cidade').val("");
             }
-        })
+            })
+        }
+    
+    
+    $('#id_cliente').keyup(function(e){
+
+        let id_cliente = e.target.value; // Pega o que está sendo digitado no input
+
+        buscaClienteById(id_cliente);
+                    
     })
 
     $('#addPedido').submit(function(e){
@@ -205,35 +144,14 @@
         })
     })
 
-    $('#addProdutoPedido').click(function(e){
+    $(document).ready(function(){
 
-        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.addProdutoPedido') }}", {
-
-            id_pedido: $('#id_pedido').val(),
-            id_produto: $('#id_produto').val(),
-            quantidade: $('#quantidade').val(),
-            valor: $('#valor').val(),
-            observacao:$('#observacoesProduto').val()
-        }, function(data){
-
-            if(!data.erro){
-
-                swal(data.mensagem, '', 'success');
-
-                
-            }
-            else{
-                swal(data.mensagem, '', 'error');
-                console.log(data.mensagem_exception);
-            }
-        })
+        let id_cliente = $('#id_cliente').val();
+        if(id_cliente != ""){
+            buscaClienteById(id_cliente);
+        }
     })
 
-    $('#quantidade').change(function(e){
-
-        let valor_produto = $('#valor').val();
-
-        $('#total').val(e.target.value * valor_produto);
-    })
+    
 </script>
 {% endblock %}

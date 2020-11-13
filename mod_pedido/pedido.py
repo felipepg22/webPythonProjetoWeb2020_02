@@ -58,6 +58,23 @@ def updateQuantidadeProduto():
         else:
             return jsonify(erro = True,mensagem = "Erro ao tentar alterar quantidade do produto do pedido!" ,mensagem_exception = str(e))
 
+@bp_pedido.route("/deletaProdutoPedido", methods=['POST'])
+@validaSessao
+def deletaProdutoPedido():
+    try:
+        _pedido_produto = PedidosProdutos()
+        _pedido_produto.id_pedido = request.form['id_pedido']
+        _pedido_produto.id_produto = request.form['id_produto']
+
+        _mensagem = _pedido_produto.deleteProdutoPedido()
+
+        return jsonify(erro = False, mensagem = _mensagem)
+    except Exception as e:
+        if len(e.args) > 1:
+            _mensagem, _mensagem_exception = e.args
+            return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
+        else:
+            return jsonify(erro = True,mensagem = "Erro ao tentar deletar produto do pedido!" ,mensagem_exception = str(e))
 @bp_pedido.route("/buscaClienteById", methods = ['POST'])
 @validaSessao
 def buscaClienteById():

@@ -188,7 +188,7 @@ class PedidosProdutos():
 
             banco.conexao.commit()
 
-            Funcoes.criaLOG(f'DELETE produto {self.id_produto} pedido {self.id_pedido}')
+            Funcoes.criaLOG(f'DELETE produto {self.id_produto} pedido {self.id_pedido}', LOG.info)
 
             return 'Produto deletado do pedido'
         except Exception as e:
