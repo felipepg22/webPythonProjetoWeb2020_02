@@ -28,6 +28,7 @@
                         <option value="{{produto[0]}}">{{ produto[1] }}</option>
                         {% endfor %}
                     </select>
+                    <div class="invalid-feedback">Este produto já está no pedido!</div>
                 </div>
                 <div class="form-group col-2">
                     <img id="imagemProduto" width="150">
@@ -55,7 +56,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" style="width: auto;" data-dismiss="modal">Fechar</button>
-                <button type="submit" id="botaoSubmit" class="btn btn-success">Adicionar</button>
+                <button type="submit" id="botaoSubmitAddProduto" class="btn btn-success">Adicionar</button>
               </div>
           </form>
         </div>
@@ -160,13 +161,16 @@
 
 {% block js%}
 
-<script>
+<script>    
     $('thead tr th').attr('scope','col');
 
     $("[id='botaoAddProduto']").click(function(e){
 
         let id_pedido = this.parentElement.parentElement.firstElementChild.textContent;
         $('#id_pedido_add_produto').val(id_pedido);
+        $('#id_produto').val("");
+        $('#quantidade').val("");
+        $('#observacoesProduto').val("");
     })
 
     $("[id='mostra_produtos']").click(function(){
@@ -257,6 +261,7 @@
         })
     })
 
+    
     function formEditarQuantidade(id_pedido, id_produto, quantidade){
 
         
@@ -265,6 +270,8 @@
         $('#quantidade_update_produto').val(quantidade);
 
         $('#alteraProduto').modal();
+
+        
 
     }
 
@@ -298,6 +305,32 @@
     $('#id_produto').change(function(e){
 
         let id_produto = e.target.value;
+
+        
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.validaProdutoPedido') }}", {
+
+            id_pedido: $('#id_pedido_add_produto').val(),
+            id_produto: id_produto
+
+        }, function(data){
+
+            if(data.erro){
+                console.log(data.mensagem_exception)
+            }
+
+            else if(data.produto_encontrado){
+
+                $('#id_produto').addClass('is-invalid');
+                $('#botaoSubmitAddProduto').attr('disabled', true);
+
+
+            }
+            else{
+                $('#id_produto').removeClass('is-invalid');
+                $('#botaoSubmitAddProduto').attr('disabled', false);
+            }
+        })
 
         $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaProdutoById') }}", {
 
@@ -335,7 +368,12 @@ $('#addProdutoPedido').submit(function(e){
         if(!data.erro){
 
             swal(data.mensagem, '', 'success');
+            $('#id_produto').val("");
+            $('#quantidade').val("");
+            $('#observacoesProduto').val("");
+            $('#imagemProduto').attr('src',"");
 
+            
             
         }
         else{

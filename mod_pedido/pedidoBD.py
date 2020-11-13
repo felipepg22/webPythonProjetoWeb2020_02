@@ -200,3 +200,29 @@ class PedidosProdutos():
                 c.close()
             if banco:
                 banco.conexao.close()
+
+    def verificaProdutoPedido(self):
+        banco = None
+        c = None
+        try:
+            banco = Banco()
+
+            c = banco.conexao.cursor()
+
+            _sql = 'SELECT id_pedido FROM tb_pedido_produtos WHERE id_pedido = %s AND id_produto = %s'
+            _sql_data = (self.id_pedido, self.id_produto)
+
+            c.execute(_sql, _sql_data)
+
+            result = c.fetchall()
+
+            return result
+        except Exception as e:
+            raise Exception('Erro ao tentar validar produto no pedido', str(e))
+
+        finally:
+            if c:
+                c.close()
+            if banco:
+                banco.conexao.close()
+    

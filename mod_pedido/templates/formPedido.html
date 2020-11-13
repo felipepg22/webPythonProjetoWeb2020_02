@@ -72,39 +72,39 @@
 <script>
 
 function buscaClienteById(id_cliente){
-            $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaClienteById') }}", {
+    $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaClienteById') }}", {
 
-            id_cliente:id_cliente
-            }, function(data){
+    id_cliente:id_cliente
+    }, function(data){
 
-            if(data.erro){
+    if(data.erro){
 
-                console.log(data.mensagem_exception);
-            }
+        console.log(data.mensagem_exception);
+    }
 
-            else if(data.cliente_encontrado){
-                // Preenche os campos de cliente do formulário
-                let cliente = $.parseJSON(data.cliente);
-                $('#nomeCliente').val(cliente.nome);
-                $('#telefone').val(cliente.telefone);
-                $('#endereco').val(cliente.endereco);
-                $('#numeroEndereco').val(cliente.numero);
-                $('#cep').val(cliente.cep);
-                $('#bairro').val(cliente.bairro);
-                $('#cidade').val(cliente.cidade);
-            }
+    else if(data.cliente_encontrado){
+        // Preenche os campos de cliente do formulário
+        let cliente = $.parseJSON(data.cliente);
+        $('#nomeCliente').val(cliente.nome);
+        $('#telefone').val(cliente.telefone);
+        $('#endereco').val(cliente.endereco);
+        $('#numeroEndereco').val(cliente.numero);
+        $('#cep').val(cliente.cep);
+        $('#bairro').val(cliente.bairro);
+        $('#cidade').val(cliente.cidade);
+    }
 
-            else{
-                $('#nomeCliente').val("");
-                $('#telefone').val("");
-                $('#endereco').val("");
-                $('#numeroEndereco').val("");
-                $('#cep').val("");
-                $('#bairro').val("");
-                $('#cidade').val("");
-            }
-            })
-        }
+    else{
+        $('#nomeCliente').val("");
+        $('#telefone').val("");
+        $('#endereco').val("");
+        $('#numeroEndereco').val("");
+        $('#cep').val("");
+        $('#bairro').val("");
+        $('#cidade').val("");
+    }
+    })
+}
     
     
     $('#id_cliente').keyup(function(e){

@@ -169,3 +169,23 @@ def selectProdutosByPedido():
             return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
         else:
             return jsonify(erro = True,mensagem = "Erro ao tentar buscar produtos do pedido!" ,mensagem_exception = str(e))
+
+@bp_pedido.route("/validaProdutoPedido", methods= ['POST'])
+@validaSessao
+def validaProdutoPedido():
+    try:
+        _pedido_produto = PedidosProdutos()
+        _pedido_produto.id_pedido = request.form['id_pedido']
+        _pedido_produto.id_produto = request.form['id_produto']
+
+        _produto_encontrado = len(_pedido_produto.verificaProdutoPedido()) > 0
+
+        print(_produto_encontrado)
+        return jsonify(erro = False, produto_encontrado = _produto_encontrado)
+    except Exception as e:
+        if len(e.args) > 1:
+            _mensagem, _mensagem_exception = e.args
+            return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
+        else:
+            return jsonify(erro = True,mensagem = "Erro ao tentar validar produto do pedido!" ,mensagem_exception = str(e))
+
