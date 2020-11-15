@@ -6,7 +6,99 @@
 <a href="{{ url_for('pedidos.formPedido')}}">
     <button  class="btn btn-primary"><i class="fas fa-plus-square">  Novo Pedido</i></button>    
 </a>
+<!-- Modal para adicionar produtos no pedido -->
+<div class="modal fade" id="addProduto" tabindex="-1" role="dialog" aria-labelledby="addProduto" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="novaComanda">Adicionar Produto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addProdutoPedido">
+              <input type="hidden" name="id_pedido" id="id_pedido_add_produto">
+            <div class="form-row">
+                <div class="form-group col-8">
+                    <label for="id_produto">Produto:</label>
+                    <select id="id_produto" class="form-control" name="id_produto" required>
+                        <option value=""></option>
+                        {% for produto in produtos: %}
+                        <option value="{{produto[0]}}">{{ produto[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">Este produto já está no pedido!</div>
+                </div>
+                <div class="form-group col-2">
+                    <img id="imagemProduto" width="150">
+                </div>                
+                <div class="form-group col-4">
+                    <label for="valor">Preço:</label>
+                    <input id="valor" name="valor" class="form-control" type="text" readonly>
+                </div>
+                
+                <div class="form-group col-2">
+                    <label for="quantidade">Quantidade:</label>
+                    <input id="quantidade" class="form-control" type="number" required>
+                </div>
+                
+            </div>
+            <div class="form-row">
+                <div class="form-group col-4">
+                    <label for="total">Total:</label>
+                    <input id="total" class="form-control" type="text" readonly>
+                </div>
+                <div class="form-group col-6">
+                    <label for="observacoesProduto">Observações:</label>
+                    <input id="observacoesProduto" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" style="width: auto;" data-dismiss="modal">Fechar</button>
+                <button type="submit" id="botaoSubmitAddProduto" class="btn btn-success">Adicionar</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Modal para alterar quantidade dos produtos no pedido -->
+<div class="modal fade" id="alteraProduto" tabindex="-1" role="dialog" aria-labelledby="alteraProduto" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="alteraComanda">Alterar Quantidade Produto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="alteraProdutoPedido">
+              <input type="hidden" name="id_pedido" id="id_pedido_update_produto">
+              <input type="hidden" name="id_produto" id="id_produto_update_produto">
+            <div class="form-row">        
+                <div class="form-group col-8">
+                    <label for="quantidade_update_produto">Quantidade:</label>
+                    <input id="quantidade_update_produto" min="0" max="100" class="form-control" type="number" required>
+                </div>                
+            </div>           
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" style="width: auto;" data-dismiss="modal">Fechar</button>
+                <button type="submit" id="botaoSubmit" class="btn btn-success">OK</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+ 
+ 
+
+
+ 
 <div style="margin-top: 20px;">
     <table class="table table-striped">
         <thead>
@@ -22,29 +114,332 @@
                 <th>Obs</th>
                 <th>Data/Hora</th>
                 <th>Produtos</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
+            {% for pedido in pedidos: %}    
             <tr>
-                <th scope="row">1</th>
-                <td>abc</td>
-                <td>123213213</td>
-                <td>Rua dahora</td>
-                <td>111111</td>
-                <td>222222</td>
-                <td>seila</td>
-                <td>tanto faz</td>
-                <td>SC</td>
-                <td>11/11/11</td>
-                <td>Algum produto</td>
+                <th scope="row">{{ pedido['ID'] }}</th>
+                <td>{{ pedido['Nome'] }}</td>
+                <td>{{ pedido['Telefone'] }}</td>
+                <td>{{ pedido['Endereco'] }}</td>
+                <td>{{ pedido['Numero'] }}</td>
+                <td>{{ pedido['CEP'] }}</td>
+                <td>{{ pedido['Bairro'] }}</td>
+                <td>{{ pedido['Cidade'] }}</td>
+                <td>{{ pedido['Observacao'] }}</td>
+                <td>{{ pedido['Data_hora'] }}</td>
+                <td>
+                    <button type="button" id="mostra_produtos" class="btn btn-info"><i class="fas fa-list-alt"></i></button>
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-5">
+                            <form action="{{ url_for('pedidos.formEditPedido') }}" method="POST">
+                                <input type="hidden" id="id_pedido" name="id_pedido" value="{{ pedido['ID'] }}">
+                                <button type="submit" title="Editar Pedido" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                            </form>
+                        </div>
+                        <div class="col-5">
+                            <button type="button" id="botaoAddProduto" class="btn btn-success" data-toggle="modal" data-target="#addProduto" title="Adicionar produto" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
+                            <div class='mt-2'>
+                                <button type="button" id="botaoExcluiPedido" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </td>
             </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h5>Produtos do Pedido <span id="id_pedido_produtos"></span></h5>
+    <table class="table table-striped">
+        <thead>
+            <th scope="row">Nome</th>
+            <th>Quantidade</th>
+            <th>Valor</th>
+            <th>Observação</th>
+        </thead>
+        <tbody id="tabela_pedido_produtos">
+            
         </tbody>
     </table>
 </div>
 {% endblock %}
 
 {% block js%}
-<script>
+
+<script>    
     $('thead tr th').attr('scope','col');
+
+    $("[id='botaoAddProduto']").click(function(e){
+
+        let id_pedido = this.parentElement.parentElement.firstElementChild.textContent;
+        $('#id_pedido_add_produto').val(id_pedido);
+        $('#id_produto').val("");
+        $('#quantidade').val("");
+        $('#observacoesProduto').val("");
+    })
+
+    $("[id='mostra_produtos']").click(function(){
+
+        let id_pedido = this.parentElement.parentElement.firstElementChild.textContent;
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.selectProdutosByPedido') }}", {
+
+            id_pedido:id_pedido
+        }, function(data){
+
+            if(!data.erro){
+                $('#id_pedido_produtos').text(id_pedido);
+                $('#tabela_pedido_produtos').empty();
+                data.produtos.forEach(produto => {
+                    
+                    $('#tabela_pedido_produtos').append(`
+                        <tr>
+                            <td>${produto['Descricao']}</td>
+                            <td>${produto['Quantidade']}</td>
+                            <td>${produto['Valor']}</td>
+                            <td>${produto['Observacao']}</td>
+                            <td>                                
+                                <input type='hidden' id='id_pedido' value='${produto['ID_PEDIDO']}'>
+                                <input type='hidden' id='id_produto' value='${produto['ID_PRODUTO']}'>
+                                <button type='button' id='editarQuantidade' title='Alterar Quantidade' class='btn btn-warning'><i class="fas fa-sort-numeric-up-alt"></i></button>
+                                <button type='button' id='deletaProduto' title='Deletar Produto' class='btn btn-danger'><i class="fas fa-times-circle"></i></button>                                
+                            </td>
+                        </tr>
+                    
+                    `)
+
+                   
+                });
+
+                $("[id='editarQuantidade']").click(function(e){
+
+                    let id_pedido = this.parentElement.firstElementChild.value;
+                    let id_produto = this.parentNode.children[1].value;
+                    let quantidade = this.parentNode.parentNode.children[1].textContent;                    
+                    
+                    formEditarQuantidade(id_pedido, id_produto, quantidade);
+                    });
+
+                $("[id='deletaProduto']").click(function(e){
+                    let id_pedido = this.parentElement.firstElementChild.value;
+                    let id_produto = this.parentNode.children[1].value;
+
+                    swal({
+                        title: "Deseja realmente remover o produto?",                       
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Sim",
+                        cancelButtonText:'Não',
+                        closeOnConfirm: false
+                        }, function(){
+
+                            $.post($SCRIPT_ROOT + "{{ url_for('pedidos.deletaProdutoPedido') }}", {
+
+                                id_pedido:id_pedido,
+                                id_produto:id_produto
+                            }, function(data){
+
+                                if(!data.erro){
+
+                                    swal(data.mensagem, '', 'success')
+
+                                    setTimeout(function(){
+
+                                        window.location.replace($SCRIPT_ROOT + "{{ url_for('pedidos.formListaPedidos') }}")
+                                    }, 1000)
+                                }
+                                else{
+
+                                    swal(data.mensagem, '', 'error' )
+                                    console.log(data.mensagem_exception)
+                                }
+                            })
+                        })
+
+                }); 
+            }
+            else{
+
+                console.log(data.mensagem_exception);
+            }
+        })
+    })
+
+    $("[id='botaoExcluiPedido']").click(function(){
+        let id_pedido = this.parentElement.parentElement.firstElementChild.textContent;
+
+        swal({
+            title: "",
+            text: "Deseja realmente excluir o pedido?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Sim",
+            cancelButtonText: 'Cancelar',
+            closeOnConfirm: false
+            },
+            function(){
+                
+                deletaPedido(id_pedido);
+        });
+
+    })
+
+    function deletaPedido(id_pedido){
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.deletePedido') }}", {
+
+            id_pedido:id_pedido
+        }, function(data){
+
+            if(!data.erro){
+                swal(data.mensagem, '', 'success');
+                // Coloca um intervalo de 1000ms entre a mensagem e o redirecionamento da página
+                setTimeout(function(){
+
+                    window.location.replace($SCRIPT_ROOT + "{{ url_for('pedidos.formListaPedidos') }}");
+                }, 1000)
+
+            }
+            else{
+                swal(data.mensagem, '', 'error');
+                console.log(data.mensagem_exception);
+            }
+        })
+    }
+    function formEditarQuantidade(id_pedido, id_produto, quantidade){
+
+        
+        $('#id_pedido_update_produto').val(id_pedido);
+        $('#id_produto_update_produto').val(id_produto);
+        $('#quantidade_update_produto').val(quantidade);
+
+        $('#alteraProduto').modal();
+
+        
+
+    }
+
+    $('#alteraProdutoPedido').submit(function(e){
+
+        e.preventDefault();
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.updateQuantidadeProduto') }}",{
+
+            id_pedido: $('#id_pedido_update_produto').val(),
+            id_produto: $('#id_produto_update_produto').val(),
+            quantidade:$('#quantidade_update_produto').val()
+        }, function(data){
+
+            if(!data.erro){
+
+                swal(data.mensagem, '', 'success')
+
+                setTimeout(function(){
+
+                    window.location.replace($SCRIPT_ROOT + "{{ url_for('pedidos.formListaPedidos') }}")
+                }, 1000)
+            }
+            else{
+
+                swal(data.mensagem, '', 'error')
+                console.log(data.mensagem_exception)
+            }
+        })
+    })
+    $('#id_produto').change(function(e){
+
+        let id_produto = e.target.value;
+
+        
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.validaProdutoPedido') }}", {
+
+            id_pedido: $('#id_pedido_add_produto').val(),
+            id_produto: id_produto
+
+        }, function(data){
+
+            if(data.erro){
+                console.log(data.mensagem_exception)
+            }
+
+            else if(data.produto_encontrado){
+
+                $('#id_produto').addClass('is-invalid');
+                $('#botaoSubmitAddProduto').attr('disabled', true);
+
+
+            }
+            else{
+                $('#id_produto').removeClass('is-invalid');
+                $('#botaoSubmitAddProduto').attr('disabled', false);
+            }
+        })
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaProdutoById') }}", {
+
+            id_produto:id_produto
+        }, function(data){
+
+            if(!data.erro){
+
+                let produto = $.parseJSON(data.produto);
+
+                $('#imagemProduto').attr('src', produto.imagem);
+                $('#valor').val(produto.valor);
+                $('#quantidade').val(1);
+                $('#total').val(1 * produto.valor);
+            }
+            else{
+
+                console.log(data.mensagem_exception);
+            }
+        })
+});
+
+$('#addProdutoPedido').submit(function(e){
+
+    e.preventDefault();
+    $.post($SCRIPT_ROOT + "{{ url_for('pedidos.addProdutoPedido') }}", {
+
+        id_pedido: $('#id_pedido_add_produto').val(),
+        id_produto: $('#id_produto').val(),
+        quantidade: $('#quantidade').val(),
+        valor: $('#valor').val(),
+        observacao:$('#observacoesProduto').val()
+    }, function(data){
+
+        if(!data.erro){
+
+            swal(data.mensagem, '', 'success');
+            $('#id_produto').val("");
+            $('#quantidade').val("");
+            $('#observacoesProduto').val("");
+            $('#imagemProduto').attr('src',"");
+
+            
+            
+        }
+        else{
+            swal(data.mensagem, '', 'error');
+            console.log(data.mensagem_exception);
+        }
+    })
+})
+
+$('#quantidade').change(function(e){
+
+    let valor_produto = $('#valor').val();
+
+    $('#total').val(e.target.value * valor_produto);
+})
 </script>
 {% endblock %}

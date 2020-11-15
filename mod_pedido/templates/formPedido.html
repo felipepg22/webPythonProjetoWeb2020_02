@@ -1,92 +1,190 @@
 {% extends 'modelo.html' %}
 {% block title %} Pedidos {% endblock %}
 
-{% block content %}
-
+{% block content %}  
+    
+    {% if pedido.id_pedido == 0: %}
     <h2>Novo Pedido</h2>
-    <form>
+    <form id="addPedido">
+    {% else: %}    
+    <h2>Editar Pedido</h2>
+    <form id="editPedido">
+    {% endif %}
         <div class="form-row">
             <div class="form-group col-2">
-                <label for="numeroPedido">Número do Pedido:</label>
-                <input id="numeroPedido" class="form-control" type="text">
+                <label for="id_pedido">Número do Pedido:</label>
+                <input id="id_pedido" value="{{ pedido.id_pedido }}" class="form-control" type="text" readonly>
+            </div>            
+            <div class="form-group col-2">
+                <label for="id_cliente">Código Cliente:</label>
+                <input id="id_cliente" value="{{pedido.id_cliente}}" class="form-control" type="text" required>
             </div>
+            
             <div class="form-group col-4">
                 <label for="nomeCliente">Nome Cliente:</label>
-                <input id="nomeCliente" class="form-control" type="text">
+                <input id="nomeCliente" class="form-control" type="text" readonly>
             </div>
             <div class="form-group col-4">
                 <label for="telefone">Telefone:</label>
-                <input id="telefone" class="form-control" type="tel">
+                <input id="telefone" class="form-control" type="tel" readonly>
             </div>
-            <div class="form-group col-2">
-                <label for="codigoCliente">Código Cliente:</label>
-                <input id="codigoCliente" class="form-control" type="text">
-            </div>
+            
         </div>
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="endereco">Endereço:</label>
-                <input id="endereco" class="form-control" type="text">
+                <input id="endereco" class="form-control" type="text" readonly>
             </div>
             <div class="form-group col-2">
                 <label for="numeroEndereco">Número:</label>
-                <input id="numeroEndereco" class="form-control" type="text">
+                <input id="numeroEndereco" class="form-control" type="text" readonly>
             </div>
             <div class="form-group col-2">
                 <label for="cep">CEP:</label>
-                <input id="cep" class="form-control" type="text">
+                <input id="cep" class="form-control" type="text" readonly>
             </div>
             <div class="form-group col-2">
                 <label for="bairro">Bairro:</label>
-                <input id="bairro" class="form-control" type="text">
+                <input id="bairro" class="form-control" type="text" readonly>
             </div>
             <div class="form-group col-2">
                 <label for="cidade">Cidade:</label>
-                <input id="cidade" class="form-control" type="text">
+                <input id="cidade" class="form-control" type="text" readonly>
             </div>
         </div>        
         <div class="form-row">
             <div class="form-group col-4">
-                <label for="dataHora">Data/Hora:</label>
-                <input id="dataHora" class="form-control" type="datetime-local">
+                <label for="data_hora">Data/Hora:</label>
+                <input id="data_hora" value="{{ pedido.data_hora }}" class="form-control" type="datetime-local" required>
             </div>
             <div class="form-group col-8">
                 <label for="observacao">Observações:</label>
-                <textarea id="observacao" class="form-control" type="text"></textarea>
-            </div>
-        </div>
-        <hr style="border-top: 3px solid #bbb;">
-        <div class="form-row">
-            <div class="form-group col-2">
-                <label for="produto">Produto:</label>
-                <input id="produto" class="form-control" type="text">
-            </div>
-            <div class="form-group col-2">
-                <label for="descricaoProduto">Descrição:</label>
-                <input id="descricaoProduto" class="form-control" type="text">
-            </div>
-            <div class="form-group col-4">
-                <label for="preco">Preço:</label>
-                <input id="preco" class="form-control" type="text">
-            </div>
-            <div class="form-group col-2">
-                <label for="quantidade">Quantidade:</label>
-                <input id="quantidade" class="form-control" type="number">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-4">
-                <label for="total">Total:</label>
-                <input id="total" class="form-control" type="text">
-            </div>
-            <div class="form-group col-6">
-                <label for="observacoesProduto">Observações:</label>
-                <input id="observacoesProduto" class="form-control" type="text">
+                <textarea id="observacao" value="{{ pedido.observacao }}" class="form-control" type="text"></textarea>
             </div>
         </div>
         
-        <button class="btn btn-primary"><i class="fas fa-plus">  Adicionar</i></button>
-        <button class="btn btn-success"><i class="far fa-save">  Salvar</i></button>
-        <button class="btn btn-danger"><i class="fas fa-trash-alt">  Excluir</i></button>
+        <button type="submit" class="btn btn-success"><i class="far fa-save">  Salvar</i></button>
+        
     </form>
+{% endblock %}
+
+{% block js %}
+<script>
+
+$('#data_hora').change(function(e){
+
+    console.log(e.target.value);
+})
+function buscaClienteById(id_cliente){
+    $.post($SCRIPT_ROOT + "{{ url_for('pedidos.buscaClienteById') }}", {
+
+    id_cliente:id_cliente
+    }, function(data){
+
+    if(data.erro){
+
+        console.log(data.mensagem_exception);
+    }
+
+    else if(data.cliente_encontrado){
+        // Preenche os campos de cliente do formulário
+        let cliente = $.parseJSON(data.cliente);
+        $('#nomeCliente').val(cliente.nome);
+        $('#telefone').val(cliente.telefone);
+        $('#endereco').val(cliente.endereco);
+        $('#numeroEndereco').val(cliente.numero);
+        $('#cep').val(cliente.cep);
+        $('#bairro').val(cliente.bairro);
+        $('#cidade').val(cliente.cidade);
+    }
+
+    else{
+        $('#nomeCliente').val("");
+        $('#telefone').val("");
+        $('#endereco').val("");
+        $('#numeroEndereco').val("");
+        $('#cep').val("");
+        $('#bairro').val("");
+        $('#cidade').val("");
+    }
+    })
+}
+    
+    
+    $('#id_cliente').keyup(function(e){
+
+        let id_cliente = e.target.value; // Pega o que está sendo digitado no input
+
+        buscaClienteById(id_cliente);
+                    
+    })
+
+    $('#addPedido').submit(function(e){
+
+        e.preventDefault();
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.addPedido') }}", {
+
+            id_cliente: $('#id_cliente').val(),
+            data_hora: $('#data_hora').val(),
+            observacao: $('#observacao').val()
+
+        }, function(data){
+
+            if(!data.erro){
+
+                swal(data.mensagem, '', 'success');
+
+                setTimeout(function(){
+
+                    window.location.replace($SCRIPT_ROOT + "{{ url_for('pedidos.formListaPedidos') }}");
+                }, 1000)
+            }
+
+            else{
+                swal(data.mensagem, '', 'error');
+                console.log(data.mensagem_exception);
+            }
+        })
+    })
+
+    $('#editPedido').submit(function(e){
+
+        e.preventDefault();
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.editPedido') }}", {
+
+            id_pedido:$('#id_pedido').val(),
+            id_cliente:$('#id_cliente').val(),
+            data_hora:$('#data_hora').val(),
+            observacao:$('#observacao').val()
+        }, function(data){
+
+            if(!data.erro){
+
+                swal(data.mensagem, '', 'success');
+
+                setTimeout(function(){
+
+                    window.location.replace($SCRIPT_ROOT + "{{ url_for('pedidos.formListaPedidos') }}");
+                }, 1000)
+            }
+
+            else{
+
+                swal(data.mensagem, '', 'error');
+                console.log(data.mensagem_exception);
+            }
+        })
+    })
+    $(document).ready(function(){
+
+        let id_cliente = $('#id_cliente').val();
+        if(id_cliente != ""){
+            buscaClienteById(id_cliente);
+        }
+    })
+
+    
+</script>
 {% endblock %}
