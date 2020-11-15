@@ -59,11 +59,12 @@
                             title: data.mensagem,                                             
                             imageUrl: "{{ url_for('static', filename='imgs/dark-side.jpg') }}",
                             imageSize:'200x200'
-                        },function(){
-
-                            window.location.replace($SCRIPT_ROOT + "{{ url_for('home.home') }}");
-
                         });
+
+                    setTimeout(function(){
+
+                        window.location.replace($SCRIPT_ROOT + "{{ url_for('home.home') }}");
+                    }, 1000);
                 }
                 else{
 
