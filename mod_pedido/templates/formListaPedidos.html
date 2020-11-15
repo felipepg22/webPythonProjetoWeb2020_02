@@ -139,6 +139,7 @@
                         <button type="submit" title="Editar Pedido" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                     </form>
                     <button type="button" id="botaoAddProduto" class="btn btn-success" data-toggle="modal" data-target="#addProduto" title="Adicionar produto" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
+                    <button type="button" id="botaoExcluiPedido" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button> 
                 </td>
             </tr>
             {% endfor %}
@@ -261,7 +262,48 @@
         })
     })
 
-    
+    $("[id='botaoExcluiPedido']").click(function(){
+        let id_pedido = this.parentElement.parentElement.firstElementChild.textContent;
+
+        swal({
+            title: "",
+            text: "Deseja realmente excluir o pedido?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Sim",
+            cancelButtonText: 'Cancelar',
+            closeOnConfirm: false
+            },
+            function(){
+                
+                deletaPedido(id_pedido);
+        });
+
+    })
+
+    function deletaPedido(id_pedido){
+
+        $.post($SCRIPT_ROOT + "{{ url_for('pedidos.deletePedido') }}", {
+
+            id_pedido:id_pedido
+        }, function(data){
+
+            if(!data.erro){
+                swal(data.mensagem, '', 'success');
+                // Coloca um intervalo de 1000ms entre a mensagem e o redirecionamento da página
+                setTimeout(function(){
+
+                    window.location.replace($SCRIPT_ROOT + "{{ url_for('pedidos.formListaPedidos') }}");
+                }, 1000)
+
+            }
+            else{
+                swal(data.mensagem, '', 'error');
+                console.log(data.mensagem_exception);
+            }
+        })
+    }
     function formEditarQuantidade(id_pedido, id_produto, quantidade){
 
         

@@ -151,6 +151,22 @@ def editPedido():
             return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
         else:
             return jsonify(erro = True,mensagem = "Erro ao tentar editar pedido!" ,mensagem_exception = str(e))
+
+@bp_pedido.route("/deletePedido", methods = ['POST'])
+@validaSessao
+def deletePedido():
+    try:
+        _pedido = Pedidos()
+        _pedido.id_pedido = request.form['id_pedido']
+        _mensagem = _pedido.delete()
+
+        return jsonify(erro = False, mensagem = _mensagem)
+    except Exception as e:
+        if len(e.args) > 1:
+            _mensagem, _mensagem_exception = e.args
+            return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
+        else:
+            return jsonify(erro = True,mensagem = "Erro ao tentar deletar pedido!" ,mensagem_exception = str(e))
 @bp_pedido.route("/addProdutoPedido", methods = ['POST'])
 @validaSessao
 def addProdutoPedido():

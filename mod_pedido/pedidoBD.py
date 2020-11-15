@@ -113,7 +113,29 @@ class Pedidos():
                 c.close()
             if banco:
                 banco.conexao.close()
-            
+    
+    def delete(self):
+        banco = None
+        c = None
+        try:
+            banco = Banco()
+
+            c = banco.conexao.cursor()
+
+            _sql = 'DELETE FROM tb_pedidos WHERE id_pedido = %s'
+            _sql_data = (self.id_pedido)
+
+            c.execute(_sql, _sql_data)
+            banco.conexao.commit()
+
+            Funcoes.criaLOG(f'DELETE pedido {self.id_pedido}', LOG.info)
+
+            return 'Pedido deletado com sucesso!'
+
+        except Exception as e:
+            Funcoes.criaLOG(str(e), LOG.error)
+
+            raise Exception('Erro ao deletar pedido', str(e))
         
 
 class PedidosProdutos():
