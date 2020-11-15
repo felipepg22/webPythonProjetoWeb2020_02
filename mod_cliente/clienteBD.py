@@ -1,5 +1,7 @@
+import json
+
 from BancoBD import Banco
-from funcoes import Funcoes
+from funcoes import Funcoes, LOG
 
 
 class Clientes(object):
@@ -78,11 +80,11 @@ class Clientes(object):
             banco.conexao.commit()
             
             c.close()
-            Funcoes.criaLOG('INSERT Cliente', 'info')
+            Funcoes.criaLOG('INSERT Cliente', LOG.info)
             return "Cliente cadastrado com sucesso!"
 
         except Exception as e:
-            Funcoes.criaLOG(str(e), 'erro')
+            Funcoes.criaLOG(str(e), LOG.error)
             raise Exception('Erro ao tentar cadastrar cliente!', str(e))
         
     def update(self):
@@ -98,11 +100,11 @@ class Clientes(object):
 
             c.close()
             
-            Funcoes.criaLOG('UPDATE Cliente', 'info')
+            Funcoes.criaLOG('UPDATE Cliente', LOG.info)
 
             return "Cliente editado com sucesso!"
         except Exception as e:
-            Funcoes.criaLOG(str(e), 'erro')           
+            Funcoes.criaLOG(str(e), LOG.error)           
             raise Exception("Erro ao editar cliente!", str(e))
     
     def delete(self):
@@ -117,10 +119,10 @@ class Clientes(object):
 
             c.close()
 
-            Funcoes.criaLOG('DELETE Cliente', 'info')
+            Funcoes.criaLOG('DELETE Cliente', LOG.info)
             return "Cliente excluído com sucesso!"
         except Exception as e:
-            Funcoes.criaLOG(str(e), 'erro')
+            Funcoes.criaLOG(str(e), LOG.error)
             raise Exception("Erro ao tentar excluir", str(e))
 
     def selectLogin(self):
@@ -156,3 +158,6 @@ class Clientes(object):
             return result
         except Exception as e:
             raise Exception(str(e))
+    
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
