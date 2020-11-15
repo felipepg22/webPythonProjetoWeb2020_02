@@ -133,22 +133,19 @@
                 <td>
                     <button type="button" id="mostra_produtos" class="btn btn-info"><i class="fas fa-list-alt"></i></button>
                 </td>
-                <td>
-                    <div class="row">
-                        <div class="col-5">
-                            <form action="{{ url_for('pedidos.formEditPedido') }}" method="POST">
-                                <input type="hidden" id="id_pedido" name="id_pedido" value="{{ pedido['ID'] }}">
-                                <button type="submit" title="Editar Pedido" class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                            </form>
-                        </div>
-                        <div class="col-5">
-                            <button type="button" id="botaoAddProduto" class="btn btn-success" data-toggle="modal" data-target="#addProduto" title="Adicionar produto" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
-                            <div class='mt-2'>
-                                <button type="button" id="botaoExcluiPedido" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button> 
-                            </div>
-                        </div>
+                <td>                  
                         
-                    </div>
+                    <form action="{{ url_for('pedidos.formEditPedido') }}" method="POST">
+                        <input type="hidden" id="id_pedido" name="id_pedido" value="{{ pedido['ID'] }}">
+                        <button type="submit" title="Editar Pedido" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                    </form>               
+                    <button type="button" id="botaoAddProduto" class="btn btn-success" data-toggle="modal" data-target="#addProduto" title="Adicionar produto" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
+                    
+                    <button type="button" id="botaoExcluiPedido" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button> 
+                            
+                        
+                        
+                    
                     
                 </td>
             </tr>
