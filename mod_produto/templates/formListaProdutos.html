@@ -6,9 +6,19 @@
 {% block content %}
 
 
-<a href="{{ url_for('produto.formProduto')}}">
-    <button  class="btn btn-primary"><i class="fas fa-plus-square">  Novo Produto</i></button>    
-</a>
+<div class="row">
+    <div class="col-sm-3">
+        <a href="{{ url_for('produto.formProduto')}}">
+            <button style="width: 100%;"  class="btn btn-primary"><i class="fas fa-plus-square">  Novo Produto</i></button>    
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <form action="{{ url_for('produto.pdfProduto') }}" method="POST">
+            <button style="width: 100%;" class="btn btn-danger" formtarget="_blank"><i class="fas fa-file-pdf"></i> Gerar PDF Produtos</button>
+        </form>
+    </div>
+
+</div>
 
 <div style="margin-top: 20px;">
     <table class="table table-striped">

@@ -1,9 +1,10 @@
 #coding: utf-8
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, send_file
 import base64
 
 from mod_login.login import validaSessao
 from mod_produto.produtoBD import Produtos
+from classeGeraPdf import PDF
 
 bp_produto = Blueprint('produto', __name__, url_prefix='/produto', template_folder='templates')
 
@@ -89,3 +90,10 @@ def deleteProduto():
             _mensagem = 'Erro no banco'
             _mensagem_exception = e.args
         return jsonify(erro = True, mensagem = _mensagem, mensagem_exception = _mensagem_exception)
+
+@bp_produto.route('/pdfProduto', methods=['POST'])
+@validaSessao
+def pdfProduto():
+    geraPdf = PDF()
+    geraPdf.pdfProdutos()
+    return send_file('pdfProdutos.pdf', attachment_filename='pdfProdutos.pdf')

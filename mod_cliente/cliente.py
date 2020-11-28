@@ -1,10 +1,11 @@
 # coding utf-8
-from flask import Blueprint, render_template, request, url_for, redirect, jsonify
+from flask import Blueprint, render_template, request, url_for, redirect, jsonify, send_file
 import hashlib
 
 from mod_login.login import validaSessao
 from mod_cliente.clienteBD import Clientes
 from funcoes import Funcoes
+from classeGeraPdf import PDF
 
 bp_cliente = Blueprint('cliente', __name__, url_prefix='/cliente', template_folder='templates')
 
@@ -110,3 +111,9 @@ def verificaSeLoginExiste():
     except Exception as e:
         return jsonify(erro = True, mensagem_exception = str(e))
 
+@bp_cliente.route('/pdfCliente', methods=['POST'])
+@validaSessao
+def pdfCliente():
+    geraPdf = PDF()
+    geraPdf.pdfClientes()
+    return send_file('pdfClientes.pdf', attachment_filename='pdfClientes.pdf')

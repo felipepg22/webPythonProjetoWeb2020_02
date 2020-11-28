@@ -1,7 +1,7 @@
 from fpdf import FPDF
 from mod_cliente.clienteBD import Clientes
 from mod_produto.produtoBD import Produtos
-from mod_pedido.pedidoBD import Pedido
+from mod_pedido.pedidoBD import Pedidos
 from datetime import datetime
 # utilizado para tratar a imagem
 import base64, re, os
@@ -44,7 +44,7 @@ class PDF(FPDF):
         # busca e mostra todos os clientes
         pdf.set_font('arial', '', 8)
         cliente = Clientes()
-        res = cliente.selectALL()
+        res = cliente.selectAll()
         if res:
             for row in res:
                 pdf.cell(10, 5, str(row[0]), 0, 0, 'L')
@@ -80,7 +80,7 @@ class PDF(FPDF):
         # busca e mostra todos os produtos
         pdf.set_font('arial', '', 8)
         produto = Produtos()
-        res = produto.selectALL()
+        res = produto.selectAll()
         if res:
             for row in res:
                 pdf.cell(10, 5, str(row[0]), 0, 0, 'L')
